@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~ng-zorro-antd/ng-zorro-antd.dark.min.css";
+
+html, body {
+  margin: 0;
+  padding: 0;
+
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* CAN (MUST) BE REMOVED ! Sample Global style */
+.container {
+
+}
+.ant-menu-item-selected ,
+.ant-btn-primary{
+  background: #e9b114 !important;
+}
+.ant-btn-primary {
+  border-color: #e9b114 !important;
+}

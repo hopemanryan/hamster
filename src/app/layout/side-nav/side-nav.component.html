@@ -1,0 +1,13 @@
+<div>
+  <nz-page-header [nzTitle]="'Hamster'"></nz-page-header>
+  <div class="projectList">
+    <ul nz-menu [nzMode]="'inline'" nzTheme="dark">
+      <li nz-menu-item *ngFor="let project of projectService.$allProjects | async; let i = index" [nzSelected]="i === 0">
+        <span>{{project.projectName}}</span>
+      </li>
+    </ul>
+    <div class="addProject">
+      <span (click)="addProject()">Add Project</span>
+    </div>
+  </div>
+</div>
