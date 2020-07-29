@@ -4,6 +4,9 @@ import * as url from 'url';
 import {getProjectInfo} from "./server/projectParser";
 import * as os from 'os';
 import {IProject} from "./server/interfaces/project.interface";
+var child_process = require('child_process');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -12,14 +15,16 @@ const args = process.argv.slice(1),
 function createWindow(): BrowserWindow {
 
   const electronScreen = screen;
+
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
+
 
   // Create the browser window.
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    width: size.width,
-    height: size.height,
+    width: 1200,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve) ? true : false,
@@ -84,13 +89,17 @@ try {
   ipcMain.on('getUserName', () => {
     const username = os.userInfo().username;
     win.webContents.send('sendUserName', username);
-  })
+  });
 
   ipcMain.on('openFolderSelector', async (event, path) => {
     const result  = await dialog.showOpenDialog(win, {
       properties: ['openDirectory']
-    })
+    });
+
     const filePath = result.filePaths[0];
+    if(!filePath) {
+      return;
+    }
     try {
       const projectInfo: IProject = await getProjectInfo(filePath)
       win.webContents.send('folderPathResponse', projectInfo);
@@ -102,6 +111,14 @@ try {
 
 
 
+
+  })
+
+  ipcMain.on('runCmdCommand', async(event, data: {folderPath: string, command: string}) => {
+    console.log(data)
+    const { stdout, stderr } = await exec('cd ' + data.folderPath + ' &&  ' + data.command);
+    console.log('stdout:', stdout);
+    console.log('stderr:', stderr);
 
   })
 

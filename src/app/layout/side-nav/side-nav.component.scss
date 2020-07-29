@@ -1,3 +1,4 @@
+@import "./src/styles";
  .addProject{
     width: 100%;
     text-align: center;
@@ -5,7 +6,7 @@
     bottom: 0rem;
     cursor: pointer;
     color:  white;;
-   background: #e9b114;
+   background: $primaryColor;
    height: 50px;
    display: flex;
    justify-content: center;

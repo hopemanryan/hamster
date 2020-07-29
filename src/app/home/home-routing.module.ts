@@ -1,12 +1,20 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Routes, RouterModule} from '@angular/router';
+import {HomeComponent} from './home.component';
 
 const routes: Routes = [
   {
-    path: 'home',
-    component: HomeComponent
+    path: 'app',
+    component: HomeComponent,
+    children: [
+      {
+        path: 'project/:id',
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        loadChildren: () => import('../project/project.module').then(p => p.ProjectModule)
+      },
+    ]
   }
 ];
 
@@ -15,4 +23,5 @@ const routes: Routes = [
   imports: [CommonModule, RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class HomeRoutingModule {}
+export class HomeRoutingModule {
+}

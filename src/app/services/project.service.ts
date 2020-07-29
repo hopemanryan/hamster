@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {from, Observable, ReplaySubject} from "rxjs";
 import {IProject} from '../interfaces/project.interface';
 import {nSQL} from "@nano-sql/core";
 import {SqlService} from "./sql.service";
 import {take, tap} from "rxjs/operators";
+
 const electron = (<any>window).require('electron');
 
 @Injectable({
@@ -12,6 +13,8 @@ const electron = (<any>window).require('electron');
 export class ProjectService {
   $allProjects: ReplaySubject<Array<IProject>> = new ReplaySubject<Array<IProject>>();
   allProjects: Array<IProject> = [];
+  $projectSelected: ReplaySubject<IProject> = new ReplaySubject<IProject>();
+
   constructor(private sqlService: SqlService) {
 
 
@@ -36,7 +39,16 @@ export class ProjectService {
     electron.ipcRenderer.send('openFolderSelector')
   }
 
+  selectProject(projectId: string) {
+    if (!projectId) {
+      return this.$projectSelected.next(null)
+    }
 
+    const found = this.allProjects.find(x => x.id === projectId);
+    if (found) {
+      this.$projectSelected.next(found);
+    }
+  }
 
 
 }

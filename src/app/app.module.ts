@@ -18,7 +18,7 @@ import { HomeModule } from './home/home.module';
 import { DetailModule } from './detail/detail.module';
 
 import { AppComponent } from './app.component';
-import {NzLayoutModule, NzMenuModule, NzPageHeaderModule} from "ng-zorro-antd";
+import {NzIconModule, NzLayoutModule, NzMenuModule, NzPageHeaderModule} from "ng-zorro-antd";
 import { SideNavComponent } from './layout/side-nav/side-nav.component';
 import { HeaderComponent } from './layout/header/header.component';
 
@@ -29,26 +29,27 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 
 @NgModule({
   declarations: [AppComponent, SideNavComponent, HeaderComponent],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    CoreModule,
-    SharedModule,
-    HomeModule,
-    DetailModule,
-    AppRoutingModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    }),
-    NzLayoutModule,
-    NzPageHeaderModule,
-    NzMenuModule
-  ],
+	imports: [
+		BrowserModule,
+		FormsModule,
+		HttpClientModule,
+		CoreModule,
+		SharedModule,
+		HomeModule,
+		DetailModule,
+		AppRoutingModule,
+		TranslateModule.forRoot({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: HttpLoaderFactory,
+				deps: [HttpClient]
+			}
+		}),
+		NzLayoutModule,
+		NzPageHeaderModule,
+		NzMenuModule,
+		NzIconModule
+	],
   providers: [],
   bootstrap: [AppComponent]
 })

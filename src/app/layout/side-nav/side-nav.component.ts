@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {IProject} from "../../interfaces/project.interface";
 import {ProjectService} from "../../services/project.service";
 import {Observable} from "rxjs";
 import {tap} from "rxjs/operators";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-side-nav',
@@ -11,16 +12,29 @@ import {tap} from "rxjs/operators";
 })
 export class SideNavComponent implements OnInit {
   constructor(
-    public projectService: ProjectService
+    public projectService: ProjectService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
+
 
   }
 
   ngOnInit(): void {
 
   }
+
   addProject() {
     this.projectService.userSelectProject();
+  }
+
+  selectProject(projectId: string) {
+    this.projectService.selectProject(projectId);
+    return this.router.navigate(['/app/project/' + projectId], {relativeTo: this.route})
+  }
+  goHome() {
+    this.projectService.selectProject(null)
+    return this.router.navigate(['/app'])
   }
 
 }
