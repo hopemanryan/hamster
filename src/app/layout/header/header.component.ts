@@ -13,4 +13,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  getFirstLetter() {
+    return this.userInfoService.userName.split('')[0].toUpperCase()
+  }
+
 }

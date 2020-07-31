@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {from, Observable, ReplaySubject} from "rxjs";
 import {IProject} from '../interfaces/project.interface';
 import {nSQL} from "@nano-sql/core";
@@ -15,14 +15,16 @@ export class ProjectService {
   allProjects: Array<IProject> = [];
   $projectSelected: ReplaySubject<IProject> = new ReplaySubject<IProject>();
 
-  constructor(private sqlService: SqlService) {
+  constructor(private sqlService: SqlService, private zone: NgZone) {
 
 
-    electron.ipcRenderer.on('folderPathResponse', async (event, data) => {
-      await this.sqlService.addOne('projects', data).toPromise();
+    electron.ipcRenderer.on('folderPathResponse',  (event, data) => {
+      return this.zone.run(async () => {
+        await this.sqlService.addOne('projects', data).toPromise();
+        this.allProjects.push(data);
+        this.$allProjects.next(this.allProjects);
+      });
 
-      this.allProjects.push(data);
-      this.$allProjects.next(this.allProjects);
     })
 
   }

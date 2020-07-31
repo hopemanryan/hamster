@@ -1,1 +1,8 @@
-<p *ngIf="userInfoService.userName">Welcome back {{userInfoService.userName}}</p>
+<div style="width: 100%; height: 100%; display: flex; justify-content: flex-end; align-items: center" *ngIf="userInfoService.userName">
+  <nz-avatar
+    style="cursor: pointer"
+    [nzTooltipTitle]="userInfoService.userName" nzTooltipPlacement="bottom" nz-button nz-tooltip
+    [nzSize]="'large'"
+    *ngIf="userInfoService.userName"
+    [nzText]="getFirstLetter()"></nz-avatar>
+</div>

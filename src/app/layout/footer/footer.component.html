@@ -1,0 +1,6 @@
+<div>
+  <nz-divider [nzText]="'Running Process'"></nz-divider>
+  <div style="display: flex; flex-wrap: wrap">
+    <nz-tag  [nzColor]="getTagColor()" *ngFor=" let process of runningProcess | async">{{process.projectName}} - {{process.key}}</nz-tag>
+  </div>
+</div>

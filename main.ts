@@ -1,12 +1,7 @@
-import { app, BrowserWindow, screen, dialog, ipcMain } from 'electron';
+import {app, BrowserWindow, screen, dialog, ipcMain, Menu} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
-import {getProjectInfo} from "./server/projectParser";
-import * as os from 'os';
-import {IProject} from "./server/interfaces/project.interface";
-var child_process = require('child_process');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+import {CliCtrl, PersonalCtrl, FolderSelectCtrl} from "./server/ctrl";
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -67,7 +62,12 @@ try {
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
-  app.on('ready', () => setTimeout(createWindow, 400));
+  app.on('ready', () => setTimeout(() => {
+    createWindow();
+    loadMenu()
+    loadCtrl()
+
+  }, 400));
 
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
@@ -83,46 +83,25 @@ try {
     // dock icon is clicked and there are no other windows open.
     if (win === null) {
       createWindow();
+      loadCtrl();
     }
   });
 
-  ipcMain.on('getUserName', () => {
-    const username = os.userInfo().username;
-    win.webContents.send('sendUserName', username);
-  });
+  const loadCtrl = () =>  {
+    PersonalCtrl(ipcMain, win);
+    FolderSelectCtrl(ipcMain, win);
+    CliCtrl(ipcMain, win);
+  };
 
-  ipcMain.on('openFolderSelector', async (event, path) => {
-    const result  = await dialog.showOpenDialog(win, {
-      properties: ['openDirectory']
-    });
+  const loadMenu = () => {
+    // const currentMenu = Menu.getApplicationMenu();
+    // const fileTab  = currentMenu.items[0];
+    // console.log(fileTab.menu)
+  }
 
-    const filePath = result.filePaths[0];
-    if(!filePath) {
-      return;
-    }
-    try {
-      const projectInfo: IProject = await getProjectInfo(filePath)
-      win.webContents.send('folderPathResponse', projectInfo);
-
-    } catch (e) {
-      console.error(e)
-      win.webContents.send('ErrorCode', e)
-    }
-
-
-
-
-  })
-
-  ipcMain.on('runCmdCommand', async(event, data: {folderPath: string, command: string}) => {
-    console.log(data)
-    const { stdout, stderr } = await exec('cd ' + data.folderPath + ' &&  ' + data.command);
-    console.log('stdout:', stdout);
-    console.log('stderr:', stderr);
-
-  })
 
 } catch (e) {
+
   // Catch Error
   // throw e;
 }

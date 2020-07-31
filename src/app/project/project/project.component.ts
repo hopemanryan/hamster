@@ -29,7 +29,7 @@ export class ProjectComponent implements OnInit {
   }
 
   runScript(script: IProjectScript) {
-    this.cliService.runCmdCommand(this.project.projectPath, script.cmd)
+    this.cliService.runCmdCommand(this.project.projectPath,this.project.id, script)
   }
 
 }
