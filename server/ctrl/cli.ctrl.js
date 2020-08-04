@@ -65,6 +65,7 @@ var CliCtrl = /** @class */ (function () {
         var _this = this;
         this.win.webContents.send('processRunning', { id: data.id, key: data.script.keyword });
         var proc = this.buildCmdProcCommand(data.script.cmd);
+        console.log('proc ', proc);
         var exec = require('child_process').exec;
         var cmdOpts = {
             cwd: data.folderPath
@@ -79,7 +80,7 @@ var CliCtrl = /** @class */ (function () {
             case 'windows':
                 return "start cmd.exe /K " + cmd;
             case 'mac':
-                return "osascript -e 'tell application \"Terminal\" to do script \"" + cmd + "\"' &";
+                return "osascript -e 'tell application \"iTerm2\" to do script \"" + cmd + "\"' &";
             default:
                 break;
         }

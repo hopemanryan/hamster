@@ -26,6 +26,7 @@ export class CliCtrl {
     this.win.webContents.send('processRunning', {id: data.id, key: data.script.keyword})
 
     const proc = this.buildCmdProcCommand(data.script.cmd);
+    console.log('proc ', proc)
 
     var exec = require('child_process').exec;
 
@@ -46,7 +47,7 @@ export class CliCtrl {
       case 'windows':
         return `start cmd.exe /K ${cmd}`
       case 'mac':
-        return `osascript -e 'tell application "Terminal" to do script "${cmd}"' &`
+        return `osascript -e 'tell application "iTerm2" to do script "${cmd}"' &`
       default:
         break
     }
