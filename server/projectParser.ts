@@ -16,7 +16,8 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
       projectName: packageJsonParsed.name,
       version: packageJsonParsed.version,
       scripts: [],
-      projectPath
+      projectPath,
+      appRequirements: []
     };
 
     if(packageJsonParsed.scripts) {
@@ -27,6 +28,23 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
         })
       }
     }
+
+    if(packageJsonParsed.dependencies) {
+        for(const key in packageJsonParsed.dependencies) {
+          response.appRequirements.push({
+            name: key,
+            version: packageJsonParsed.dependencies[key]
+          })
+        }
+    }
+  if(packageJsonParsed.devDependencies) {
+    for(const key in packageJsonParsed.devDependencies) {
+      response.appRequirements.push({
+        name: key,
+        version: packageJsonParsed.devDependencies[key]
+      })
+    }
+  }
 
     return response;
 

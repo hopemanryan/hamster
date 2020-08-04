@@ -14,6 +14,7 @@ export class ProjectService {
   $allProjects: ReplaySubject<Array<IProject>> = new ReplaySubject<Array<IProject>>();
   allProjects: Array<IProject> = [];
   $projectSelected: ReplaySubject<IProject> = new ReplaySubject<IProject>();
+  projectSelectedId:string;
 
   constructor(private sqlService: SqlService, private zone: NgZone) {
 
@@ -24,7 +25,7 @@ export class ProjectService {
         this.allProjects.push(data);
         this.$allProjects.next(this.allProjects);
       });
-    })
+    });
 
 
     electron.ipcRenderer.on('syncSingleDone', async (event, response: { data: IProject }) => {
@@ -35,14 +36,10 @@ export class ProjectService {
         this.allProjects[foundIndex] = response.data;
       }
       this.$allProjects.next(this.allProjects);
-      await this.$projectSelected.pipe(
-        take(1),
-        tap((selected) => {
-          if(selected) {
-            this.zone.run(() =>  this.$projectSelected.next(this.allProjects.find(x => x.id === selected.id)))
-          }
-        })
-      ).toPromise()
+      if(this.projectSelectedId && this.projectSelectedId === response.data.id) {
+        this.zone.run(() => this.$projectSelected.next(this.allProjects[foundIndex])
+        )
+      }
     });
 
 
@@ -67,19 +64,17 @@ export class ProjectService {
     electron.ipcRenderer.send('openFolderSelector')
   }
 
-  selectProject(projectId: string) {
-    if (!projectId) {
+  selectProject(project: IProject) {
+    if (!project) {
       return this.$projectSelected.next(null)
     }
+    this.projectSelectedId = project.id;
+    this.$projectSelected.next(project);
 
-    const found = this.allProjects.find(x => x.id === projectId);
-    if (found) {
-      this.$projectSelected.next(found);
-    }
   }
 
 
-  syncSingleProject(projectId: string) {
+  syncSingleProject(projectId?: string ) {
     const found = this.allProjects.find(x => x.id === projectId);
     if (found) {
       electron.ipcRenderer.send('syncSingleProject', found);

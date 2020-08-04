@@ -2,7 +2,7 @@
   <nz-page-header [nzTitle]="'Hamster'" (click)="goHome()"></nz-page-header>
   <div class="projectList">
     <ul nz-menu [nzMode]="'inline'" nzTheme="dark">
-      <li nz-menu-item *ngFor="let project of projectService.$allProjects | async; let i = index" (click)="selectProject(project.id)" >
+      <li nz-menu-item *ngFor="let project of projectService.$allProjects | async; let i = index" (click)="selectProject(project)" >
         <span>{{project.projectName}}</span>
       </li>
     </ul>

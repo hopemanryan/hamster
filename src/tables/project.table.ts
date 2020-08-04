@@ -6,6 +6,7 @@ export const ProjectTable = {
     "version:string": {},
     "projectPath:string": {},
     "scripts:obj[]": [],
+    "appRequirements:obj[]" : []
   },
 
 };

@@ -43,7 +43,7 @@ var resolve = require('path').resolve;
 var readdir = require('fs').promises.readdir;
 function getProjectInfo(projectPath) {
     return __awaiter(this, void 0, void 0, function () {
-        var fileList, packageJsonFileRaw, packageJsonParsed, response, script;
+        var fileList, packageJsonFileRaw, packageJsonParsed, response, script, key, key;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, fs.readdir(projectPath)];
@@ -61,13 +61,30 @@ function getProjectInfo(projectPath) {
                         projectName: packageJsonParsed.name,
                         version: packageJsonParsed.version,
                         scripts: [],
-                        projectPath: projectPath
+                        projectPath: projectPath,
+                        appRequirements: []
                     };
                     if (packageJsonParsed.scripts) {
                         for (script in packageJsonParsed.scripts) {
                             response.scripts.push({
                                 keyword: script,
                                 cmd: packageJsonParsed.scripts[script]
+                            });
+                        }
+                    }
+                    if (packageJsonParsed.dependencies) {
+                        for (key in packageJsonParsed.dependencies) {
+                            response.appRequirements.push({
+                                name: key,
+                                version: packageJsonParsed.dependencies[key]
+                            });
+                        }
+                    }
+                    if (packageJsonParsed.devDependencies) {
+                        for (key in packageJsonParsed.devDependencies) {
+                            response.appRequirements.push({
+                                name: key,
+                                version: packageJsonParsed.devDependencies[key]
                             });
                         }
                     }

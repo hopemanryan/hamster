@@ -4,9 +4,15 @@ export interface IProject {
   version: string | number,
   scripts: Array<IProjectScript>,
   projectPath: string
+  appRequirements? : IAppReq[]
 }
 
 export interface IProjectScript {
   keyword:string,
   cmd: string
+}
+
+export interface IAppReq {
+  name: string,
+  version: string
 }

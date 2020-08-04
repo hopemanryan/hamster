@@ -3,7 +3,8 @@ export interface IProject {
   projectName: string,
   version: string | number,
   scripts: Array<IProjectScript>,
-  projectPath: string
+  projectPath: string,
+  appRequirements? : IAppReq[]
 }
 
 export interface IProjectScript {
@@ -18,3 +19,9 @@ export  interface ICurrentlyRunningProcess {
   projectName: string,
   tagColor?: string
 }
+
+export interface IAppReq {
+  name: string,
+  version: string
+}
+

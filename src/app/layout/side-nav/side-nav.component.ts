@@ -28,9 +28,9 @@ export class SideNavComponent implements OnInit {
     this.projectService.userSelectProject();
   }
 
-  selectProject(projectId: string) {
-    this.projectService.selectProject(projectId);
-    return this.router.navigate(['/app/project/' + projectId], {relativeTo: this.route})
+  selectProject(project:IProject) {
+    this.projectService.selectProject(project);
+    return this.router.navigate(['/app/project/' + project.id], {relativeTo: this.route})
   }
   goHome() {
     this.projectService.selectProject(null)

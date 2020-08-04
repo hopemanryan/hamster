@@ -1,4 +1,4 @@
-<div *ngIf="project" style="padding: 1rem">
+<div class="page-container" *ngIf="project" style="padding: 1rem;max-height: 600px; overflow: auto;">
   <div style="display: flex; justify-content: space-between; align-items: center" >
     <nz-page-header [nzTitle]="project.projectName" [nzSubtitle]="project.version"></nz-page-header>
     <div style="display: flex">
@@ -14,5 +14,12 @@
   <nz-steps [nzCurrent]="project.scripts.length" nzProgressDot  nzDirection="vertical">
       <nz-step *ngFor="let script of project.scripts" [nzTitle]="script.keyword" [nzDescription]="script.cmd" (click)="runScript(script)" style="cursor: pointer"></nz-step>
   </nz-steps>
+  <nz-divider [nzText]="'App Requirements'"></nz-divider>
+  <div *ngIf="project.appRequirements">
+     <nz-tag *ngFor="let appReq of project.appRequirements"> {{appReq.name}} - {{appReq.version}}</nz-tag>
+  </div>
+
+
+
 
 </div>
