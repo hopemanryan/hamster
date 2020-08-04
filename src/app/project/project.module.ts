@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectComponent } from './project/project.component';
 import {ProjectRoutingModule} from "./project/project-routing.module";
-import {NzDividerModule, NzPageHeaderModule, NzStepsModule} from "ng-zorro-antd";
+import {NzButtonModule, NzDividerModule, NzPageHeaderModule, NzStepsModule, NzWaveModule} from "ng-zorro-antd";
 
 
 
@@ -13,7 +13,9 @@ import {NzDividerModule, NzPageHeaderModule, NzStepsModule} from "ng-zorro-antd"
     ProjectRoutingModule,
     NzPageHeaderModule,
     NzDividerModule,
-    NzStepsModule
+    NzStepsModule,
+    NzWaveModule,
+    NzButtonModule
   ]
 })
 export class ProjectModule { }

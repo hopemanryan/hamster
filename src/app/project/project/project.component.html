@@ -1,5 +1,10 @@
 <div *ngIf="project" style="padding: 1rem">
-  <nz-page-header [nzTitle]="project.projectName" [nzSubtitle]="project.version"></nz-page-header>
+  <div style="display: flex; justify-content: space-between; align-items: center" (click)="syncProject()">
+    <nz-page-header [nzTitle]="project.projectName" [nzSubtitle]="project.version"></nz-page-header>
+    <button [nzType]="'danger'" nz-button>Refresh</button>
+  </div>
+
+
   <nz-divider [nzText]="'Scripts'"></nz-divider>
   <nz-steps [nzCurrent]="project.scripts.length" nzProgressDot  nzDirection="vertical">
       <nz-step *ngFor="let script of project.scripts" [nzTitle]="script.keyword" [nzDescription]="script.cmd" (click)="runScript(script)" style="cursor: pointer"></nz-step>

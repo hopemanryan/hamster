@@ -32,4 +32,8 @@ export class ProjectComponent implements OnInit {
     this.cliService.runCmdCommand(this.project.projectPath,this.project.id, script)
   }
 
+  syncProject() {
+    this.projectService.syncSingleProject(this.project.id)
+  }
+
 }

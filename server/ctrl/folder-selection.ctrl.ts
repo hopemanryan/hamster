@@ -25,4 +25,9 @@ export const  FolderSelectCtrl =  (ipcMain: IpcMain, win: BrowserWindow) => {
 
   });
 
+  ipcMain.on('syncSingleProject', async (event, req: IProject) => {
+    const projectInfo: IProject = await getProjectInfo(req.projectPath);
+    win.webContents.send('syncSingleDone', {data: {...projectInfo, id: req.id}})
+  });
+
 };

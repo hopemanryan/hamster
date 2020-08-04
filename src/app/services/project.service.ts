@@ -27,6 +27,16 @@ export class ProjectService {
 
     })
 
+
+    electron.ipcRenderer.on('syncSingleDone', async (event, response: {data: IProject}) => {
+     await  this.sqlService.addOne('projects', response.data).toPromise();
+      let  found = this.allProjects.find(x => x.id === response.data.id);
+      console.log(found)
+      found = response.data;
+      this.$allProjects.next(this.allProjects);
+
+    })
+
   }
 
   getAllProjects() {
@@ -51,6 +61,16 @@ export class ProjectService {
       this.$projectSelected.next(found);
     }
   }
+
+
+  syncSingleProject(projectId: string) {
+    const found = this.allProjects.find(x => x.id === projectId);
+    if(found) {
+      electron.ipcRenderer.send('syncSingleProject', found);
+    }
+
+  }
+
 
 
 }

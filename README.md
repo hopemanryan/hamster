@@ -19,4 +19,5 @@ Benefits:
 - [X] Add single project
 - [X] Add folder scan 
 - [ ] Cli select
+- [ ] Toastr messages 
 ```
