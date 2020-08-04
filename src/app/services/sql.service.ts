@@ -16,4 +16,9 @@ export class SqlService {
   getAll(tableName: string) {
     return from(nSQL(tableName).query('select').exec())
   }
+
+  removeSingleById(tableName: string, id: string) {
+    return from(nSQL(tableName).query('delete').where(['id', '=', id]).exec());
+  }
+
 }

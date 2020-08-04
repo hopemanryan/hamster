@@ -2,6 +2,7 @@ import {app, BrowserWindow, screen, dialog, ipcMain, Menu} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import {CliCtrl, PersonalCtrl, FolderSelectCtrl} from "./server/ctrl";
+import {BuildMenu} from "./server/menu";
 const os = require('os');
 
 let win: BrowserWindow = null;
@@ -95,9 +96,8 @@ try {
   };
 
   const loadMenu = () => {
-    // const currentMenu = Menu.getApplicationMenu();
-    // const fileTab  = currentMenu.items[0];
-    // console.log(fileTab.menu)
+    BuildMenu(win, Menu)
+
   }
 
 

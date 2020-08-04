@@ -1,12 +1,11 @@
 import {Injectable, NgZone} from '@angular/core';
-import {from, Observable, ReplaySubject} from "rxjs";
+import { ReplaySubject} from "rxjs";
 import {IProject} from '../interfaces/project.interface';
-import {nSQL} from "@nano-sql/core";
 import {SqlService} from "./sql.service";
 import {take, tap} from "rxjs/operators";
 
 const electron = (<any>window).require('electron');
-
+const ProjectTable = 'projects'
 @Injectable({
   providedIn: 'root'
 })
@@ -20,11 +19,10 @@ export class ProjectService {
 
     electron.ipcRenderer.on('folderPathResponse',  (event, data) => {
       return this.zone.run(async () => {
-        await this.sqlService.addOne('projects', data).toPromise();
+        await this.sqlService.addOne(ProjectTable, data).toPromise();
         this.allProjects.push(data);
         this.$allProjects.next(this.allProjects);
       });
-
     })
 
 
@@ -37,10 +35,16 @@ export class ProjectService {
 
     })
 
+
+    electron.ipcRenderer.on('InitRefreshAll', () =>  {
+
+      alert('it got throught')
+    })
+
   }
 
   getAllProjects() {
-    this.sqlService.getAll('projects').pipe(
+    this.sqlService.getAll(ProjectTable).pipe(
       take(1),
       tap((projects: Array<IProject>) => this.allProjects = projects),
       tap(() => this.$allProjects.next(this.allProjects)),
@@ -73,4 +77,15 @@ export class ProjectService {
 
 
 
+  async removeSingleProject(projectId: string) {
+    await this.sqlService.removeSingleById(ProjectTable, projectId).pipe(
+      tap(() => {
+        const foundIndex = this.allProjects.findIndex(x => x.id === projectId);
+        if(foundIndex > -1 ) {
+          this.allProjects.splice(foundIndex, 1);
+          this.$allProjects.next(this.allProjects);
+        }
+      })
+    ).toPromise()
+  }
 }

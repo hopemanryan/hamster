@@ -1,6 +1,7 @@
-import {dialog, ipcMain, IpcMain} from 'electron'
-import BrowserWindow = Electron.BrowserWindow;
+import {IpcMain} from 'electron'
 import {IProjectScript} from "../interfaces/project.interface";
+import {OsEnum} from "../enums/os.enum";
+import BrowserWindow = Electron.BrowserWindow;
 
 const platformToOs = {
   "darwin" : 'mac',
@@ -8,7 +9,7 @@ const platformToOs = {
 }
 
 export class CliCtrl {
-  os: string
+  os: OsEnum
 
   constructor(os: string, private ipcMain: IpcMain, private win: BrowserWindow) {
     this.os = platformToOs[os] || 'linux';
@@ -25,33 +26,50 @@ export class CliCtrl {
   runCliCmd(data: { folderPath: string, script: IProjectScript, id: string }) {
     this.win.webContents.send('processRunning', {id: data.id, key: data.script.keyword})
 
-    const proc = this.buildCmdProcCommand(data.script.cmd);
-    console.log('proc ', proc)
-
-    var exec = require('child_process').exec;
-
-    const cmdOpts = {
-      cwd: data.folderPath
-    };
+    const proc = this.buildCmdProcCommand(data.script.cmd, data.folderPath);
 
 
-    exec(proc, cmdOpts, () => {
-      console.log('done');
-      this.win.webContents.send('processKilled', {id: data.id});
-    });
+
+      const  exec = require('child_process').exec;
+
+      const cmdOpts = {
+        cwd: data.folderPath
+      };
+
+      exec(proc, cmdOpts,
+        () => {
+          console.log('done');
+          this.win.webContents.send('processKilled', {id: data.id});
+        },
+        (e) => {
+          console.log('error', e);
+          this.win.webContents.send('processKilled', {id: data.id});
+
+        }
+
+      );
+
+
+
+
   }
 
+  'tell application "iTerm2" to do script "${cmd}"'
 
-  buildCmdProcCommand(cmd: string) {
+  buildCmdProcCommand(cmd: string, path: string) {
     switch (this.os) {
       case 'windows':
         return `start cmd.exe /K ${cmd}`
       case 'mac':
-        return `osascript -e 'tell application "iTerm2" to do script "${cmd}"' &`
+        return `osascript -e 'tell application "Terminal"
+    do script "cd ${path} && ${cmd} "
+    activate
+end tell'`
       default:
         break
     }
   }
+
 
 
 

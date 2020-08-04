@@ -81,16 +81,15 @@ exports.FolderSelectCtrl = function (ipcMain, win) {
             }
         });
     }); });
-    ipcMain.on('syncSingleProject', function (event, data) { return __awaiter(void 0, void 0, void 0, function () {
+    ipcMain.on('syncSingleProject', function (event, req) { return __awaiter(void 0, void 0, void 0, function () {
         var projectInfo;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    console.log(data);
-                    return [4 /*yield*/, projectParser_1.getProjectInfo(data.projectPath)];
+                case 0: return [4 /*yield*/, projectParser_1.getProjectInfo(req.projectPath)];
                 case 1:
                     projectInfo = _a.sent();
-                    win.webContents.send('syncSingleDone', { data: __assign(__assign({}, projectInfo), { id: data.id }) });
+                    console.log(projectInfo);
+                    win.webContents.send('syncSingleDone', { data: __assign(__assign({}, projectInfo), { id: req.id }) });
                     return [2 /*return*/];
             }
         });

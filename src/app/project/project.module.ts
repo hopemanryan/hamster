@@ -16,6 +16,7 @@ import {NzButtonModule, NzDividerModule, NzPageHeaderModule, NzStepsModule, NzWa
     NzStepsModule,
     NzWaveModule,
     NzButtonModule
-  ]
+  ],
+
 })
 export class ProjectModule { }

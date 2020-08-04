@@ -12,7 +12,6 @@ export class CliService {
   $currentlyRunning: ReplaySubject<Array<ICurrentlyRunningProcess>> = new ReplaySubject<Array<ICurrentlyRunningProcess>>();
   constructor(private projectService: ProjectService, private zone: NgZone) {
     electron.ipcRenderer.on('processRunning', (event,  data: {id: string , key: string}) => {
-      console.log(data)
       this.zone.run(() => this.addRunningProcess(data))
     });
 
@@ -34,7 +33,6 @@ export class CliService {
 
   removeProcess(data: {id: string}) {
     const indexOf = this.currentlyRunning.findIndex(x => x.id === data.id);
-    console.log('index', indexOf)
     if(indexOf === -1) return;
     this.currentlyRunning.splice(indexOf, 1);
     this.$currentlyRunning.next(this.currentlyRunning);

@@ -15,5 +15,6 @@ export interface IProjectScript {
 export  interface ICurrentlyRunningProcess {
   id: string,
   key: string,
-  projectName: string
+  projectName: string,
+  tagColor?: string
 }

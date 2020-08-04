@@ -36,4 +36,10 @@ export class ProjectComponent implements OnInit {
     this.projectService.syncSingleProject(this.project.id)
   }
 
+  removeProject() {
+    return this.projectService.removeSingleProject(this.project.id).then(() => {
+      return this.router.navigate(['/'], {relativeTo: this.route})
+    });
+  }
+
 }

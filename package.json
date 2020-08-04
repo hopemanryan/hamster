@@ -98,6 +98,7 @@
   "dependencies": {
     "@angular/animations": "10.0.5",
     "@nano-sql/core": "2.3.7",
+    "applescript": "1.0.0",
     "fs-extra": "9.0.1",
     "ng-zorro-antd": "9.3.0"
   }
