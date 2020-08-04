@@ -2,6 +2,7 @@ import {app, BrowserWindow, screen, dialog, ipcMain, Menu} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import {CliCtrl, PersonalCtrl, FolderSelectCtrl} from "./server/ctrl";
+const os = require('os');
 
 let win: BrowserWindow = null;
 const args = process.argv.slice(1),
@@ -90,7 +91,7 @@ try {
   const loadCtrl = () =>  {
     PersonalCtrl(ipcMain, win);
     FolderSelectCtrl(ipcMain, win);
-    CliCtrl(ipcMain, win);
+    new CliCtrl(os.platform(), ipcMain, win);
   };
 
   const loadMenu = () => {

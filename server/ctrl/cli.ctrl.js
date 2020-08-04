@@ -37,22 +37,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CliCtrl = void 0;
-exports.CliCtrl = function (ipcMain, win) {
-    ipcMain.on('runCmdCommand', function (event, data) { return __awaiter(void 0, void 0, void 0, function () {
-        var proc, exec, cmdOpts;
-        return __generator(this, function (_a) {
-            win.webContents.send('processRunning', { id: data.id, key: data.script.keyword });
-            proc = "start cmd.exe /K " + data.script.cmd;
-            exec = require('child_process').exec;
-            cmdOpts = {
-                cwd: data.folderPath
-            };
-            exec(proc, cmdOpts, function () {
-                console.log('done');
-                win.webContents.send('processKilled', { id: data.id });
-            });
-            return [2 /*return*/];
-        });
-    }); });
+var platformToOs = {
+    "darwin": 'mac',
+    "win32": 'windows'
 };
+var CliCtrl = /** @class */ (function () {
+    function CliCtrl(os, ipcMain, win) {
+        this.ipcMain = ipcMain;
+        this.win = win;
+        this.os = platformToOs[os] || 'linux';
+        this.initListeners();
+    }
+    CliCtrl.prototype.initListeners = function () {
+        var _this = this;
+        this.ipcMain.on('runCmdCommand', function (event, data) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.runCliCmd(data)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    };
+    CliCtrl.prototype.runCliCmd = function (data) {
+        var _this = this;
+        this.win.webContents.send('processRunning', { id: data.id, key: data.script.keyword });
+        var proc = this.buildCmdProcCommand(data.script.cmd);
+        console.log('proc ', proc);
+        var exec = require('child_process').exec;
+        var cmdOpts = {
+            cwd: data.folderPath
+        };
+        exec(proc, cmdOpts, function () {
+            console.log('done');
+            _this.win.webContents.send('processKilled', { id: data.id });
+        });
+    };
+    CliCtrl.prototype.buildCmdProcCommand = function (cmd) {
+        switch (this.os) {
+            case 'windows':
+                return "start cmd.exe /K " + cmd;
+            case 'mac':
+                return "osascript -e 'tell application \"iTerm2\" to do script \"" + cmd + "\"' &";
+            default:
+                break;
+        }
+    };
+    return CliCtrl;
+}());
+exports.CliCtrl = CliCtrl;
 //# sourceMappingURL=cli.ctrl.js.map
