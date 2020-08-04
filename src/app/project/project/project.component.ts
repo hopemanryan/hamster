@@ -21,7 +21,7 @@ export class ProjectComponent implements OnInit {
   ) {
     this.projectService.$projectSelected.pipe(
       tap(project => this.project = project),
-      switchMap((project) => !project ? this.router.navigate(['/app']) : of(project))
+      switchMap((project) => !project ? this.router.navigate(['/app']) : of(project)),
     ).subscribe()
   }
 

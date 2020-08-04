@@ -44,14 +44,14 @@
     "@angular-eslint/eslint-plugin": "0.0.1-alpha.32",
     "@angular-eslint/eslint-plugin-template": "0.0.1-alpha.32",
     "@angular-eslint/template-parser": "0.0.1-alpha.32",
+    "@angular/animations": "^10.0.5",
+    "@angular/cdk": "^9.2.4",
     "@angular/cli": "10.0.2",
     "@angular/common": "10.0.3",
     "@angular/compiler": "10.0.3",
     "@angular/compiler-cli": "10.0.3",
     "@angular/core": "10.0.3",
     "@angular/forms": "10.0.3",
-    "@angular/animations": "^10.0.5",
-    "@angular/cdk": "^9.2.4",
     "@angular/language-service": "10.0.3",
     "@angular/platform-browser": "10.0.3",
     "@angular/platform-browser-dynamic": "10.0.3",
@@ -60,6 +60,7 @@
     "@ngx-translate/http-loader": "6.0.0",
     "@types/jasmine": "3.5.11",
     "@types/jasminewd2": "2.0.8",
+    "@types/klaw": "3.0.1",
     "@types/mocha": "7.0.2",
     "@types/node": "12.12.6",
     "@typescript-eslint/eslint-plugin": "3.6.0",
@@ -100,6 +101,7 @@
     "@nano-sql/core": "2.3.7",
     "applescript": "1.0.0",
     "fs-extra": "9.0.1",
+    "klaw": "3.0.0",
     "ng-zorro-antd": "9.3.0"
   }
 }

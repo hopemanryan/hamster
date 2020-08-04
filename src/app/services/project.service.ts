@@ -1,11 +1,12 @@
 import {Injectable, NgZone} from '@angular/core';
-import { ReplaySubject} from "rxjs";
+import {ReplaySubject} from "rxjs";
 import {IProject} from '../interfaces/project.interface';
 import {SqlService} from "./sql.service";
 import {take, tap} from "rxjs/operators";
 
 const electron = (<any>window).require('electron');
 const ProjectTable = 'projects'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +18,7 @@ export class ProjectService {
   constructor(private sqlService: SqlService, private zone: NgZone) {
 
 
-    electron.ipcRenderer.on('folderPathResponse',  (event, data) => {
+    electron.ipcRenderer.on('folderPathResponse', (event, data) => {
       return this.zone.run(async () => {
         await this.sqlService.addOne(ProjectTable, data).toPromise();
         this.allProjects.push(data);
@@ -26,20 +27,31 @@ export class ProjectService {
     })
 
 
-    electron.ipcRenderer.on('syncSingleDone', async (event, response: {data: IProject}) => {
-     await  this.sqlService.addOne('projects', response.data).toPromise();
-      let  found = this.allProjects.find(x => x.id === response.data.id);
-      console.log(found)
-      found = response.data;
+    electron.ipcRenderer.on('syncSingleDone', async (event, response: { data: IProject }) => {
+
+      await this.sqlService.addOne('projects', response.data).toPromise();
+      const  foundIndex = this.allProjects.findIndex(x => x.id === response.data.id);
+      if(foundIndex > -1) {
+        this.allProjects[foundIndex] = response.data;
+      }
       this.$allProjects.next(this.allProjects);
+      await this.$projectSelected.pipe(
+        take(1),
+        tap((selected) => {
+          if(selected) {
+            this.zone.run(() =>  this.$projectSelected.next(this.allProjects.find(x => x.id === selected.id)))
+          }
+        })
+      ).toPromise()
+    });
 
-    })
 
+    electron.ipcRenderer.on('InitRefreshAll', () => {
+      return this.zone.run(() => {
+        this.allProjects.forEach(x => electron.ipcRenderer.send('syncSingleProject', x))
+      })
 
-    electron.ipcRenderer.on('InitRefreshAll', () =>  {
-
-      alert('it got throught')
-    })
+    });
 
   }
 
@@ -69,19 +81,18 @@ export class ProjectService {
 
   syncSingleProject(projectId: string) {
     const found = this.allProjects.find(x => x.id === projectId);
-    if(found) {
+    if (found) {
       electron.ipcRenderer.send('syncSingleProject', found);
     }
 
   }
 
 
-
   async removeSingleProject(projectId: string) {
     await this.sqlService.removeSingleById(ProjectTable, projectId).pipe(
       tap(() => {
         const foundIndex = this.allProjects.findIndex(x => x.id === projectId);
-        if(foundIndex > -1 ) {
+        if (foundIndex > -1) {
           this.allProjects.splice(foundIndex, 1);
           this.$allProjects.next(this.allProjects);
         }

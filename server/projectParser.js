@@ -39,6 +39,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProjectInfo = void 0;
 var fs = require("fs-extra");
 var errors_enum_1 = require("./enums/errors.enum");
+var resolve = require('path').resolve;
+var readdir = require('fs').promises.readdir;
 function getProjectInfo(projectPath) {
     return __awaiter(this, void 0, void 0, function () {
         var fileList, packageJsonFileRaw, packageJsonParsed, response, script;

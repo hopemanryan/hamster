@@ -9,6 +9,10 @@ exports.BuildMenu = function (win, Menu) {
                 {
                     label: 'Refresh All Projects',
                     click: function () { return win.webContents.send('InitRefreshAll'); }
+                },
+                {
+                    label: 'Close',
+                    click: function () { return win.close(); }
                 }
             ]
         }

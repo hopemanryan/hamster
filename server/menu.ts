@@ -9,6 +9,10 @@ export const BuildMenu= (win: BrowserWindow, Menu: any ): void => {
         {
           label: 'Refresh All Projects',
           click: () => win.webContents.send('InitRefreshAll')
+        },
+        {
+          label: 'Close',
+          click: () => win.close()
         }
       ]
     }

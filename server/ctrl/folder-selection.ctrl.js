@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -47,52 +60,81 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FolderSelectCtrl = void 0;
+exports.FsSCtrl = void 0;
 var electron_1 = require("electron");
 var projectParser_1 = require("../projectParser");
-exports.FolderSelectCtrl = function (ipcMain, win) {
-    ipcMain.on('openFolderSelector', function (event, path) { return __awaiter(void 0, void 0, void 0, function () {
-        var result, filePath, projectInfo, e_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, electron_1.dialog.showOpenDialog(win, {
-                        properties: ['openDirectory']
-                    })];
-                case 1:
-                    result = _a.sent();
-                    filePath = result.filePaths[0];
-                    if (!filePath) {
+var base_ctrl_1 = require("./base.ctrl");
+var FsSCtrl = /** @class */ (function (_super) {
+    __extends(FsSCtrl, _super);
+    function FsSCtrl(ipcMain, win) {
+        var _this = _super.call(this, ipcMain, win) || this;
+        _this.ipcMain = ipcMain;
+        _this.win = win;
+        _this.initListeners();
+        return _this;
+    }
+    FsSCtrl.prototype.getFolderPath = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var result, filePath;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, electron_1.dialog.showOpenDialog(this.win, {
+                            properties: ['openDirectory']
+                        })];
+                    case 1:
+                        result = _a.sent();
+                        filePath = result.filePaths[0];
+                        if (!filePath) {
+                            return [2 /*return*/];
+                        }
+                        return [2 /*return*/, filePath];
+                }
+            });
+        });
+    };
+    FsSCtrl.prototype.initListeners = function () {
+        var _this = this;
+        this.ipcMain.on('openFolderSelector', function (event, path) { return __awaiter(_this, void 0, void 0, function () {
+            var directory, projectInfo, e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getFolderPath()];
+                    case 1:
+                        directory = _a.sent();
+                        if (!directory) {
+                            return [2 /*return*/];
+                        }
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, projectParser_1.getProjectInfo(directory)];
+                    case 3:
+                        projectInfo = _a.sent();
+                        this.win.webContents.send('folderPathResponse', projectInfo);
+                        return [3 /*break*/, 5];
+                    case 4:
+                        e_1 = _a.sent();
+                        console.error(e_1);
+                        this.win.webContents.send('ErrorCode', e_1);
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        }); });
+        this.ipcMain.on('syncSingleProject', function (event, req) { return __awaiter(_this, void 0, void 0, function () {
+            var projectInfo;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, projectParser_1.getProjectInfo(req.projectPath)];
+                    case 1:
+                        projectInfo = _a.sent();
+                        this.win.webContents.send('syncSingleDone', { data: __assign(__assign({}, projectInfo), { id: req.id }) });
                         return [2 /*return*/];
-                    }
-                    _a.label = 2;
-                case 2:
-                    _a.trys.push([2, 4, , 5]);
-                    return [4 /*yield*/, projectParser_1.getProjectInfo(filePath)];
-                case 3:
-                    projectInfo = _a.sent();
-                    win.webContents.send('folderPathResponse', projectInfo);
-                    return [3 /*break*/, 5];
-                case 4:
-                    e_1 = _a.sent();
-                    console.error(e_1);
-                    win.webContents.send('ErrorCode', e_1);
-                    return [3 /*break*/, 5];
-                case 5: return [2 /*return*/];
-            }
-        });
-    }); });
-    ipcMain.on('syncSingleProject', function (event, req) { return __awaiter(void 0, void 0, void 0, function () {
-        var projectInfo;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, projectParser_1.getProjectInfo(req.projectPath)];
-                case 1:
-                    projectInfo = _a.sent();
-                    console.log(projectInfo);
-                    win.webContents.send('syncSingleDone', { data: __assign(__assign({}, projectInfo), { id: req.id }) });
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-};
+                }
+            });
+        }); });
+    };
+    return FsSCtrl;
+}(base_ctrl_1.BaseCtrl));
+exports.FsSCtrl = FsSCtrl;
 //# sourceMappingURL=folder-selection.ctrl.js.map

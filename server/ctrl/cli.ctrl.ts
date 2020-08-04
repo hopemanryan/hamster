@@ -2,16 +2,18 @@ import {IpcMain} from 'electron'
 import {IProjectScript} from "../interfaces/project.interface";
 import {OsEnum} from "../enums/os.enum";
 import BrowserWindow = Electron.BrowserWindow;
+import {BaseCtrl} from "./base.ctrl";
 
 const platformToOs = {
   "darwin" : 'mac',
   "win32": 'windows'
-}
+};
 
-export class CliCtrl {
-  os: OsEnum
+export class CliCtrl extends BaseCtrl{
+  os: OsEnum;
 
   constructor(os: string, private ipcMain: IpcMain, private win: BrowserWindow) {
+    super(ipcMain, win);
     this.os = platformToOs[os] || 'linux';
     this.initListeners();
   }
@@ -24,7 +26,7 @@ export class CliCtrl {
 
 
   runCliCmd(data: { folderPath: string, script: IProjectScript, id: string }) {
-    this.win.webContents.send('processRunning', {id: data.id, key: data.script.keyword})
+    this.win.webContents.send('processRunning', {id: data.id, key: data.script.keyword});
 
     const proc = this.buildCmdProcCommand(data.script.cmd, data.folderPath);
 
@@ -49,22 +51,18 @@ export class CliCtrl {
 
       );
 
-
-
-
   }
 
-  'tell application "iTerm2" to do script "${cmd}"'
 
   buildCmdProcCommand(cmd: string, path: string) {
     switch (this.os) {
       case 'windows':
-        return `start cmd.exe /K ${cmd}`
+        return `start cmd.exe /K ${cmd}`;
       case 'mac':
         return `osascript -e 'tell application "Terminal"
     do script "cd ${path} && ${cmd} "
     activate
-end tell'`
+end tell'`;
       default:
         break
     }

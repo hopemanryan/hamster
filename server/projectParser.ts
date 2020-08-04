@@ -1,6 +1,9 @@
 import * as fs from 'fs-extra'
 import {ErrorsEnum} from "./enums/errors.enum";
 import {IProject} from "./interfaces/project.interface";
+const { resolve } = require('path');
+const { readdir } = require('fs').promises;
+
 export async function getProjectInfo(projectPath: string): Promise<any> {
     const fileList = await fs.readdir(projectPath);
     if(!fileList.includes('.git')) {
@@ -29,6 +32,9 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
 
 
 }
+
+
+
 function uuidv4() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);

@@ -12,7 +12,6 @@ export class HomeComponent implements OnInit {
 
   constructor(private router: Router, private projectService: ProjectService) {
 
-  this.projectService.$allProjects.subscribe(res => console.log(res))
   }
 
   ngOnInit(): void {

@@ -1,7 +1,7 @@
 import {app, BrowserWindow, screen, dialog, ipcMain, Menu} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
-import {CliCtrl, PersonalCtrl, FolderSelectCtrl} from "./server/ctrl";
+import {CliCtrl, PersonalCtrl, FsSCtrl} from "./server/ctrl";
 import {BuildMenu} from "./server/menu";
 const os = require('os');
 
@@ -66,7 +66,7 @@ try {
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
   app.on('ready', () => setTimeout(() => {
     createWindow();
-    loadMenu()
+    loadMenu();
     loadCtrl()
 
   }, 400));
@@ -90,8 +90,8 @@ try {
   });
 
   const loadCtrl = () =>  {
-    PersonalCtrl(ipcMain, win);
-    FolderSelectCtrl(ipcMain, win);
+    new PersonalCtrl(ipcMain, win);
+    new FsSCtrl(ipcMain, win);
     new CliCtrl(os.platform(), ipcMain, win);
   };
 

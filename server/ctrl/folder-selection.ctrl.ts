@@ -1,34 +1,55 @@
-import {dialog, ipcMain, IpcMain} from 'electron'
+import {dialog, IpcMain} from 'electron'
 import BrowserWindow = Electron.BrowserWindow;
 import {IProject} from "../interfaces/project.interface";
 import {getProjectInfo} from "../projectParser";
-export const  FolderSelectCtrl =  (ipcMain: IpcMain, win: BrowserWindow) => {
+import {BaseCtrl} from "./base.ctrl";
 
-  ipcMain.on('openFolderSelector', async (event, path) => {
-    const result = await dialog.showOpenDialog(win, {
+export class  FsSCtrl  extends BaseCtrl{
+  constructor(private  ipcMain: IpcMain, private win: BrowserWindow) {
+    super(ipcMain, win);
+    this.initListeners()
+
+  }
+
+
+  async  getFolderPath() {
+    const result = await dialog.showOpenDialog(this.win, {
       properties: ['openDirectory']
     });
-
     const filePath = result.filePaths[0];
     if (!filePath) {
       return;
     }
-    try {
-      const projectInfo: IProject = await getProjectInfo(filePath)
-      win.webContents.send('folderPathResponse', projectInfo);
+    return filePath
 
-    } catch (e) {
-      console.error(e)
-      win.webContents.send('ErrorCode', e)
-    }
+  }
 
 
-  });
+  initListeners() {
+    this.ipcMain.on('openFolderSelector', async (event, path) => {
+      const directory = await this.getFolderPath();
+      if (!directory) {
+        return;
+      }
+      try {
+        const projectInfo: IProject = await getProjectInfo(directory);
+        this.win.webContents.send('folderPathResponse', projectInfo);
 
-  ipcMain.on('syncSingleProject', async (event, req: IProject) => {
-    const projectInfo: IProject = await getProjectInfo(req.projectPath);
-    console.log(projectInfo)
-    win.webContents.send('syncSingleDone', {data: {...projectInfo, id: req.id}})
-  });
+      } catch (e) {
+        console.error(e);
+        this.win.webContents.send('ErrorCode', e)
+      }
+    });
 
-};
+
+    this.ipcMain.on('syncSingleProject', async (event, req: IProject) => {
+      const projectInfo: IProject = await getProjectInfo(req.projectPath);
+      this.win.webContents.send('syncSingleDone', {data: {...projectInfo, id: req.id}})
+    });
+  }
+
+}
+
+
+
+
