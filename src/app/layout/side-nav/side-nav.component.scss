@@ -12,3 +12,11 @@
    justify-content: center;
    align-items: center;
 }
+
+.logo {
+  background-image: url("~assets/Hamster-Logo.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  height: 85px;
+}

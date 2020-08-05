@@ -26,6 +26,7 @@ function createWindow(): BrowserWindow {
       nodeIntegration: true,
       allowRunningInsecureContent: (serve) ? true : false,
     },
+    icon: __dirname + '/Logo-App.png'
   });
 
   if (serve) {
