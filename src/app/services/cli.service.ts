@@ -2,6 +2,8 @@ import {Injectable, NgZone} from '@angular/core';
 import {ProjectService} from "./project.service";
 import {ICurrentlyRunningProcess, IProjectScript} from "../interfaces/project.interface";
 import {Observable, ReplaySubject} from "rxjs";
+import IpcRendererEvent = Electron.IpcRendererEvent;
+import {CommunicatorService} from "./communicator.service";
 const electron = (<any>window).require('electron');
 
 @Injectable({
@@ -10,20 +12,34 @@ const electron = (<any>window).require('electron');
 export class CliService {
   currentlyRunning: ICurrentlyRunningProcess[] = [];
   $currentlyRunning: ReplaySubject<Array<ICurrentlyRunningProcess>> = new ReplaySubject<Array<ICurrentlyRunningProcess>>();
-  constructor(private projectService: ProjectService, private zone: NgZone) {
-    electron.ipcRenderer.on('processRunning', (event,  data: {id: string , key: string}) => {
-      this.zone.run(() => this.addRunningProcess(data))
-    });
+  listeners: Array<{eventName: string, callback: any}> = [
+    {
+      eventName: 'processRunning',
+      callback: this.processRunningResponse.bind(this)
+    },
+    {
+      eventName: 'processKilled',
+      callback: this.processKilledResponse.bind(this)
+    }
+  ];
 
-    electron.ipcRenderer.on('processKilled', (event, data: {id: string}) => {
-      this.zone.run(() => this.removeProcess(data))
-    })
+  constructor(private projectService: ProjectService, private zone: NgZone, private communicatorService: CommunicatorService) {
+    this.communicatorService.addMultipleListeners(this.listeners)
+  }
+
+
+  processRunningResponse(event: IpcRendererEvent, data: any): void {
+    this.zone.run(() => this.addRunningProcess(data))
+
+  }
+  processKilledResponse(event: IpcRendererEvent, data: any): void {
+    this.zone.run(() => this.removeProcess(data))
 
   }
 
 
 
-  addRunningProcess ( data: {id: string , key: string}) {
+  addRunningProcess ( data: {id: string , key: string}): void {
     const project = this.projectService.allProjects.find(x => x.id === data.id);
     if(!project) return;
     this.currentlyRunning.push({...data, projectName: project.projectName});
@@ -31,16 +47,15 @@ export class CliService {
   }
 
 
-  removeProcess(data: {id: string}) {
+  removeProcess(data: {id: string}): void {
     const indexOf = this.currentlyRunning.findIndex(x => x.id === data.id);
     if(indexOf === -1) return;
     this.currentlyRunning.splice(indexOf, 1);
     this.$currentlyRunning.next(this.currentlyRunning);
   }
 
-  runCmdCommand(path: string, projectId: string, script: IProjectScript) {
-    console.log(projectId)
+  runCmdCommand(path: string, projectId: string, script: IProjectScript): void {
     if(!path || !script) return;
-    electron.ipcRenderer.send('runCmdCommand', {folderPath: path, script: script, id: projectId})
+    this.communicatorService.sendEvent('runCmdCommand', {folderPath: path, script: script, id: projectId})
   }
 }
