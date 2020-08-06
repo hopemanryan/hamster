@@ -11,11 +11,6 @@ export class UserInfoService {
   public userName: string;
 
   constructor(private communicatorService: CommunicatorService) {
-    // electron.ipcRenderer.on('sendUserName', async (event, data) => {
-    //   console.log(data);
-    //   this.userName = data
-    // });
-    //
     this.communicatorService.addListener('sendUserName', this.userNameFetchResponse.bind(this));
     this.communicatorService.sendEvent('getUserName')
   }
