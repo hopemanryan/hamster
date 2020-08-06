@@ -4,7 +4,6 @@ import {ICurrentlyRunningProcess, IProjectScript} from "../interfaces/project.in
 import {Observable, ReplaySubject} from "rxjs";
 import IpcRendererEvent = Electron.IpcRendererEvent;
 import {CommunicatorService} from "./communicator.service";
-const electron = (<any>window).require('electron');
 
 @Injectable({
   providedIn: 'root'

@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import IpcRendererEvent = Electron.IpcRendererEvent;
 import {CommunicatorService} from "./communicator.service";
 
-const electron = (<any>window).require('electron');
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,7 @@ export class UserInfoService {
     this.communicatorService.sendEvent('getUserName')
   }
 
-   userNameFetchResponse(event: IpcRendererEvent, data: string): void {
+  userNameFetchResponse(event: IpcRendererEvent, data: string): void {
     this.userName = data
   }
 }

@@ -6,7 +6,6 @@ import {take, tap} from "rxjs/operators";
 import IpcRendererEvent = Electron.IpcRendererEvent;
 import {CommunicatorService} from "./communicator.service";
 
-const electron = (<any>window).require('electron');
 const ProjectTable = 'projects';
 
 @Injectable({
