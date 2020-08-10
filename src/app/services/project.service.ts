@@ -61,6 +61,7 @@ export class ProjectService {
       await this.sqlService.addOne(ProjectTable, data).toPromise();
       this.allProjects.push(data);
       this.$allProjects.next(this.allProjects);
+
     });
   }
 
@@ -69,6 +70,8 @@ export class ProjectService {
       take(1),
       tap((projects: Array<IProject>) => this.allProjects = projects),
       tap(() => this.$allProjects.next(this.allProjects)),
+      tap(() => this.refreshAllProjects())
+
     ).subscribe();
   }
 
@@ -105,4 +108,6 @@ export class ProjectService {
       })
     ).toPromise();
   }
+
+
 }
