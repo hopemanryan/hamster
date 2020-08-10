@@ -3,6 +3,7 @@ import {ErrorsEnum} from "./enums/errors.enum";
 import {IProject} from "./interfaces/project.interface";
 const { resolve } = require('path');
 const { readdir } = require('fs').promises;
+const gitCommitInfo = require('git-commit-info');
 
 export async function getProjectInfo(projectPath: string): Promise<any> {
 
@@ -10,16 +11,21 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
     if(!fileList.includes('.git')) {
       throw Error(ErrorsEnum.NOT_GIT_PATH)
     }
+
     const packageJsonFileRaw = await fs.readFile(projectPath+ '/package.json', 'utf-8');
-    const packageJsonParsed: any = JSON.parse(packageJsonFileRaw)
+    const packageJsonParsed: any = JSON.parse(packageJsonFileRaw);
+    const info = await gitCommitInfo({cwd: projectPath});
     const response: IProject = {
       id: '' + uuidv4(),
       projectName: packageJsonParsed.name,
       version: packageJsonParsed.version,
       scripts: [],
       projectPath,
-      appRequirements: []
+      appRequirements: [],
+      gitCommits: [info]
     };
+
+    console.log(response)
 
     if(packageJsonParsed.scripts) {
       for(const script in packageJsonParsed.scripts) {

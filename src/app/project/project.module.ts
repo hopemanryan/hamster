@@ -6,7 +6,7 @@ import {
 	NzButtonModule,
 	NzDividerModule,
 	NzPageHeaderModule,
-	NzStepsModule,
+	NzStepsModule, NzTabsModule,
 	NzTagModule,
 	NzWaveModule
 } from "ng-zorro-antd";
@@ -23,7 +23,8 @@ import {
 		NzStepsModule,
 		NzWaveModule,
 		NzButtonModule,
-		NzTagModule
+		NzTagModule,
+		NzTabsModule
 	],
 
 })

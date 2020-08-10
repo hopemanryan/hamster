@@ -3,7 +3,7 @@ import {CliService} from "../../services/cli.service";
 import {ICurrentlyRunningProcess} from "../../interfaces/project.interface";
 import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
-const tagColor = ['magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple'];
+const tagColor = ['#CAD2C5', '#84a98c', '#52796F', '#354F52', '#2F3E46'];
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',

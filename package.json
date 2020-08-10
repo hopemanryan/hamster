@@ -1,11 +1,11 @@
 {
-  "name": "angular-electron",
-  "version": "8.0.0",
-  "description": "Angular 10 with Electron (Typescript + SASS + Hot Reload)",
-  "homepage": "https://github.com/maximegris/angular-electron",
+  "name": "Hamster",
+  "version": "0.0.1",
+  "description": "Manage all your projects",
+  "homepage": "https://github.com/hopemanryan/hamster",
   "author": {
-    "name": "Maxime GRIS",
-    "email": "maxime.gris@gmail.com"
+    "name": "Ryan Hoffman",
+    "email": "hopemanryan@gmail.com"
   },
   "keywords": [
     "angular",
@@ -101,7 +101,7 @@
     "@nano-sql/core": "2.3.7",
     "applescript": "1.0.0",
     "fs-extra": "9.0.1",
-    "klaw": "3.0.0",
+    "git-commit-info": "2.0.0",
     "ng-zorro-antd": "9.3.0"
   }
 }

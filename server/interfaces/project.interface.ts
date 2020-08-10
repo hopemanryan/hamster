@@ -4,7 +4,8 @@ export interface IProject {
   version: string | number,
   scripts: Array<IProjectScript>,
   projectPath: string
-  appRequirements? : IAppReq[]
+  appRequirements? : IAppReq[],
+  gitCommits: any[]
 }
 
 export interface IProjectScript {

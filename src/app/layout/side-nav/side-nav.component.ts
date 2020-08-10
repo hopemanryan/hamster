@@ -33,7 +33,8 @@ export class SideNavComponent implements OnInit {
     return this.router.navigate(['/app/project/' + project.id], {relativeTo: this.route})
   }
   goHome() {
-    this.projectService.selectProject(null)
+    this.projectService.selectProject(null);
+    console.log('here')
     return this.router.navigate(['/app'])
   }
 

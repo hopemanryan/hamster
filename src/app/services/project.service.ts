@@ -5,6 +5,7 @@ import {SqlService} from "./sql.service";
 import {take, tap} from "rxjs/operators";
 import IpcRendererEvent = Electron.IpcRendererEvent;
 import {CommunicatorService} from "./communicator.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 const ProjectTable = 'projects';
 
@@ -32,7 +33,13 @@ export class ProjectService {
     },
   ];
 
-  constructor(private sqlService: SqlService, private zone: NgZone, private communicatorService: CommunicatorService) {
+  constructor(
+    private sqlService: SqlService,
+    private zone: NgZone,
+    private communicatorService: CommunicatorService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
 
     this.communicatorService.addMultipleListeners(this.listeners)
   }
@@ -56,7 +63,7 @@ export class ProjectService {
     }
   }
 
-  folderPathResponse(event: IpcRendererEvent, data: any):any{
+  folderPathResponse(event: IpcRendererEvent, data: any): any {
     return this.zone.run(async () => {
       await this.sqlService.addOne(ProjectTable, data).toPromise();
       this.allProjects.push(data);
@@ -65,17 +72,17 @@ export class ProjectService {
     });
   }
 
-  getAllProjects():void {
+  getAllProjects(): void {
     this.sqlService.getAll(ProjectTable).pipe(
       take(1),
       tap((projects: Array<IProject>) => this.allProjects = projects),
       tap(() => this.$allProjects.next(this.allProjects)),
-      tap(() => this.refreshAllProjects())
+      tap(() => this.refreshAllProjects()),
 
     ).subscribe();
   }
 
-  userSelectProject():void {
+  userSelectProject(): void {
     this.communicatorService.sendEvent('openFolderSelector')
   }
 

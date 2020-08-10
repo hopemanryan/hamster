@@ -2,22 +2,31 @@
   <div style="display: flex; justify-content: space-between; align-items: center" >
     <nz-page-header [nzTitle]="project.projectName" [nzSubtitle]="project.version"></nz-page-header>
     <div style="display: flex">
-      <button [nzType]="'danger'" nz-button style="margin-right: 10px;" (click)="syncProject()">Refresh</button>
-      <button nz-button  nzType="primary" nzDanger (click)="removeProject()">Remove</button>
+      <button   nzType="primary" nz-button style="margin-right: 10px;" (click)="syncProject()">Refresh</button>
+      <button  [nzType]="'danger'" nz-button  (click)="removeProject()">Remove</button>
     </div>
 
   </div>
 
+  <nz-tabset>
+    <nz-tab [nzTitle]="'Commands'">
+      <nz-steps [nzCurrent]="project.scripts.length" nzProgressDot  nzDirection="vertical">
+        <nz-step *ngFor="let script of project.scripts" [nzTitle]="script.keyword" [nzDescription]="script.cmd" (click)="runScript(script)" style="cursor: pointer"></nz-step>
+      </nz-steps>
+    </nz-tab>
+    <nz-tab [nzTitle]="'Dependencies'">
+      <div *ngIf="project.appRequirements">
+        <nz-tag *ngFor="let appReq of project.appRequirements"> {{appReq.name}} - {{appReq.version}}</nz-tag>
+      </div>
+    </nz-tab>
+
+    <nz-tab [nzTitle]="'Git'">
+
+    </nz-tab>
+
+  </nz-tabset>
 
 
-  <nz-divider [nzText]="'Scripts'"></nz-divider>
-  <nz-steps [nzCurrent]="project.scripts.length" nzProgressDot  nzDirection="vertical">
-      <nz-step *ngFor="let script of project.scripts" [nzTitle]="script.keyword" [nzDescription]="script.cmd" (click)="runScript(script)" style="cursor: pointer"></nz-step>
-  </nz-steps>
-  <nz-divider [nzText]="'App Requirements'"></nz-divider>
-  <div *ngIf="project.appRequirements">
-     <nz-tag *ngFor="let appReq of project.appRequirements"> {{appReq.name}} - {{appReq.version}}</nz-tag>
-  </div>
 
 
 
