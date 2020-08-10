@@ -27,6 +27,8 @@ export class  FsSCtrl  extends BaseCtrl{
 
   initListeners() {
     this.ipcMain.on('openFolderSelector', async (event, path) => {
+
+
       const directory = await this.getFolderPath();
       if (!directory) {
         return;
@@ -36,8 +38,9 @@ export class  FsSCtrl  extends BaseCtrl{
         this.win.webContents.send('folderPathResponse', projectInfo);
 
       } catch (e) {
+        this.win.webContents.send('filePathError',{error: e.message });
+
         console.error(e);
-        this.win.webContents.send('ErrorCode', e)
       }
     });
 

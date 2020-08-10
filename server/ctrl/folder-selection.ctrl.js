@@ -114,8 +114,9 @@ var FsSCtrl = /** @class */ (function (_super) {
                         return [3 /*break*/, 5];
                     case 4:
                         e_1 = _a.sent();
+                        console.log('in here', e_1);
+                        this.win.webContents.send('filePathError', { error: e_1.message });
                         console.error(e_1);
-                        this.win.webContents.send('ErrorCode', e_1);
                         return [3 /*break*/, 5];
                     case 5: return [2 /*return*/];
                 }

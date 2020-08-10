@@ -5,7 +5,8 @@ const { resolve } = require('path');
 const { readdir } = require('fs').promises;
 
 export async function getProjectInfo(projectPath: string): Promise<any> {
-    const fileList = await fs.readdir(projectPath);
+
+  const fileList = await fs.readdir(projectPath);
     if(!fileList.includes('.git')) {
       throw Error(ErrorsEnum.NOT_GIT_PATH)
     }

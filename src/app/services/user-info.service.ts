@@ -14,6 +14,7 @@ export class UserInfoService {
     this.communicatorService.sendEvent('getUserName')
   }
 
+
   userNameFetchResponse(event: IpcRendererEvent, data: string): void {
     this.userName = data
   }

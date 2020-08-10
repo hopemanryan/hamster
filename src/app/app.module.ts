@@ -23,7 +23,7 @@ import {
   NzDividerModule,
   NzIconModule,
   NzLayoutModule,
-  NzMenuModule,
+  NzMenuModule, NzMessageService, NzNotificationService,
   NzPageHeaderModule,
   NzStepsModule,
   NzTagModule, NzToolTipModule
@@ -67,7 +67,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     NzToolTipModule
 
   ],
-  providers: [],
+  providers: [NzNotificationService, NzMessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

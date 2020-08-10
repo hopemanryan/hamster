@@ -29,7 +29,7 @@ export class ProjectService {
     {
       eventName: 'InitRefreshAll',
       callback: this.refreshAllProjects.bind(this)
-    }
+    },
   ];
 
   constructor(private sqlService: SqlService, private zone: NgZone, private communicatorService: CommunicatorService) {

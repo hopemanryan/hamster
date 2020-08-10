@@ -1,3 +1,3 @@
 export enum ErrorsEnum  {
-  NOT_GIT_PATH = 'no git in folder'
+  NOT_GIT_PATH = 'No git file found in folder'
 }
