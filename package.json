@@ -35,7 +35,8 @@
     "test:watch": "ng test",
     "e2e": "npm run build:prod && cross-env TS_NODE_PROJECT='e2e/tsconfig.e2e.json' mocha --timeout 300000 --require ts-node/register e2e/**/*.e2e.ts",
     "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "roj": "npm install && npm uninstall electron && export npm_config_platform=win32 && npm install electron && unset npm_config_platform"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "9.2.0",
@@ -70,7 +71,6 @@
     "conventional-changelog-cli": "2.0.34",
     "core-js": "3.6.5",
     "cross-env": "7.0.2",
-    "electron": "9.1.0",
     "electron-builder": "22.7.0",
     "electron-reload": "1.5.0",
     "eslint": "7.4.0",
@@ -100,8 +100,10 @@
     "@angular/animations": "10.0.5",
     "@nano-sql/core": "2.3.7",
     "applescript": "1.0.0",
+    "electron": "9.2.0",
     "fs-extra": "9.0.1",
     "git-commit-info": "2.0.0",
+    "gitlog": "4.0.0",
     "ng-zorro-antd": "9.3.0"
   }
 }

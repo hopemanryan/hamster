@@ -3,7 +3,7 @@ import {ErrorsEnum} from "./enums/errors.enum";
 import {IProject} from "./interfaces/project.interface";
 const { resolve } = require('path');
 const { readdir } = require('fs').promises;
-const gitCommitInfo = require('git-commit-info');
+import gitlog, { GitlogOptions } from "gitlog";
 
 export async function getProjectInfo(projectPath: string): Promise<any> {
 
@@ -14,18 +14,23 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
 
     const packageJsonFileRaw = await fs.readFile(projectPath+ '/package.json', 'utf-8');
     const packageJsonParsed: any = JSON.parse(packageJsonFileRaw);
-    const info = await gitCommitInfo({cwd: projectPath});
-    const response: IProject = {
+    // const info = await gitCommitInfo({cwd: projectPath});
+   const resp  =  gitlog({
+    repo: projectPath,
+    fields: ["subject", "authorName", "authorDate"],
+  });
+
+
+  const response: IProject = {
       id: '' + uuidv4(),
       projectName: packageJsonParsed.name,
       version: packageJsonParsed.version,
       scripts: [],
       projectPath,
       appRequirements: [],
-      gitCommits: [info]
+      gitCommits: resp
     };
 
-    console.log(response)
 
     if(packageJsonParsed.scripts) {
       for(const script in packageJsonParsed.scripts) {

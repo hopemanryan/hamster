@@ -41,10 +41,10 @@ var fs = require("fs-extra");
 var errors_enum_1 = require("./enums/errors.enum");
 var resolve = require('path').resolve;
 var readdir = require('fs').promises.readdir;
-var gitCommitInfo = require('git-commit-info');
+var gitlog_1 = require("gitlog");
 function getProjectInfo(projectPath) {
     return __awaiter(this, void 0, void 0, function () {
-        var fileList, packageJsonFileRaw, packageJsonParsed, info, response, script, key, key;
+        var fileList, packageJsonFileRaw, packageJsonParsed, resp, response, script, key, key;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, fs.readdir(projectPath)];
@@ -57,9 +57,10 @@ function getProjectInfo(projectPath) {
                 case 2:
                     packageJsonFileRaw = _a.sent();
                     packageJsonParsed = JSON.parse(packageJsonFileRaw);
-                    return [4 /*yield*/, gitCommitInfo({ cwd: projectPath })];
-                case 3:
-                    info = _a.sent();
+                    resp = gitlog_1.default({
+                        repo: projectPath,
+                        fields: ["subject", "authorName", "authorDate"],
+                    });
                     response = {
                         id: '' + uuidv4(),
                         projectName: packageJsonParsed.name,
@@ -67,9 +68,8 @@ function getProjectInfo(projectPath) {
                         scripts: [],
                         projectPath: projectPath,
                         appRequirements: [],
-                        gitCommits: [info]
+                        gitCommits: resp
                     };
-                    console.log(response);
                     if (packageJsonParsed.scripts) {
                         for (script in packageJsonParsed.scripts) {
                             response.scripts.push({
