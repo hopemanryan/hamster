@@ -34,7 +34,6 @@ export class SideNavComponent implements OnInit {
   }
   goHome() {
     this.projectService.selectProject(null);
-    console.log('here')
     return this.router.navigate(['/app'])
   }
 

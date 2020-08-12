@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~ng-zorro-antd/ng-zorro-antd.dark.min.css";
-$primaryColor: #039E66 ;
+$primaryColor: #6d48e5 ;
 html, body {
   margin: 0;
   padding: 0;
@@ -53,4 +53,12 @@ html, body {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
   background-color: #555;
+}
+
+.ant-layout, .ant-layout-header, .ant-layout-footer {
+  background-color: #393C45 !important;
+  background: #393C45 !important;
+}
+.ant-layout-sider {
+  background: #2E3035 !important;
 }
