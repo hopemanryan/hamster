@@ -10,17 +10,28 @@
 
   <nz-tabset>
     <nz-tab [nzTitle]="'Commands'">
+      <div *ngIf="!project.scripts || !project.scripts.length"   style="text-align: center; margin-bottom: 1rem">
+        No Scripts Found
+      </div>
       <nz-steps [nzCurrent]="project.scripts.length" nzProgressDot  nzDirection="vertical">
-        <nz-step *ngFor="let script of project.scripts" [nzTitle]="script.keyword" [nzDescription]="script.cmd" (click)="runScript(script)" style="cursor: pointer"></nz-step>
+        <nz-step *ngFor="let script of project.scripts"
+                 [nzTitle]="script.keyword" [nzDescription]="script.cmd"
+                 (click)="runScript(script)" style="cursor: pointer"></nz-step>
       </nz-steps>
     </nz-tab>
     <nz-tab [nzTitle]="'Dependencies'">
+      <div *ngIf="!project.appRequirements || !project.appRequirements.length"  style="text-align: center; margin-bottom: 1rem">
+        No Dependencies Found
+      </div>
       <div *ngIf="project.appRequirements">
         <nz-tag *ngFor="let appReq of project.appRequirements"> {{appReq.name}} - {{appReq.version}}</nz-tag>
       </div>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Git'">
+      <div *ngIf="!project.gitCommits || !project.gitCommits.length" style="text-align: center; margin-bottom: 1rem">
+        No Commits Found
+      </div>
       <nz-collapse>
         <nz-collapse-panel *ngFor="let commit of project.gitCommits"
                            [nzHeader]="(commit.authorDate ) + ' - ' +  commit.authorName" [nzActive]="" >
@@ -36,10 +47,24 @@
             </nz-list>
           </p>
 
-
-
         </nz-collapse-panel>
       </nz-collapse>
+
+    </nz-tab>
+    <nz-tab [nzTitle]="'Grouped Commands'">
+      <div style="text-align: right">
+        <button  nz-button  (click)=" tagMode = tagMode === 'default' ? 'closeable' : 'default' " *ngIf="commandGroups && commandGroups.length" style="margin-right: 5px"> Edit</button>
+        <button   nzType="primary" nz-button  (click)="addNewCommandGroup()">Add Command Group</button>
+
+      </div>
+
+      <div *ngIf="commandGroups && commandGroups.length">
+        <nz-tag *ngFor="let script of commandGroups; let i = index" [nzMode]="tagMode" (nzAfterClose)="tagMode === 'closeable'  ? removeGroupScript(script.id, i): null" (click)="tagMode !== 'closeable' ? runGroupScript(script.scripts) : null">
+            {{script.name}}
+        </nz-tag>
+
+      </div>
+
 
     </nz-tab>
 

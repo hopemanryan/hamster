@@ -1,8 +1,8 @@
 import {Injectable, NgZone} from '@angular/core';
-import {Observable, ReplaySubject} from "rxjs";
+import {Observable, of, ReplaySubject} from "rxjs";
 import {IProject} from '../interfaces/project.interface';
 import {SqlService} from "./sql.service";
-import {take, tap} from "rxjs/operators";
+import {switchMap, take, tap} from "rxjs/operators";
 import IpcRendererEvent = Electron.IpcRendererEvent;
 import {CommunicatorService} from "./communicator.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -15,8 +15,11 @@ const ProjectTable = 'projects';
 export class ProjectService {
   $allProjects: ReplaySubject<Array<IProject>> = new ReplaySubject<Array<IProject>>();
   allProjects: Array<IProject> = [];
+
+
   $projectSelected: ReplaySubject<IProject> = new ReplaySubject<IProject>();
   projectSelectedId: string;
+
 
   listeners: Array<{ eventName: string, callback: any }> = [
     {
@@ -78,7 +81,6 @@ export class ProjectService {
       tap((projects: Array<IProject>) => this.allProjects = projects),
       tap(() => this.$allProjects.next(this.allProjects)),
       tap(() => this.refreshAllProjects()),
-
     ).subscribe();
   }
 
@@ -117,4 +119,27 @@ export class ProjectService {
   }
 
 
+  addCommandGroup(newCmdGroup: any): Observable<any> {
+    const obj  = {...newCmdGroup, id: uuidv4()};
+    return this.sqlService.addOne('command-group', obj).pipe(switchMap(() => of(obj)))
+
+  }
+
+  getProjectCommandGroups(projectId: string): Observable<any> {
+    return this.sqlService.find('command-group', ['projectId', '=', projectId])
+  }
+
+  removeCommandGroup(groupId: string): Observable<any> {
+    return this.sqlService.removeSingleById('command-group', groupId)
+  }
+
+
+
+}
+
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
 }

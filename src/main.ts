@@ -6,6 +6,7 @@ import { nSQL } from "@nano-sql/core";
 import { AppModule } from './app/app.module';
 import { AppConfig } from './environments/environment';
 import {ProjectTable} from "./tables/project.table";
+import {CommandGroup} from "./tables/command-group.table";
 
 if (AppConfig.production) {
   enableProdMode();
@@ -16,7 +17,8 @@ const resolved = new Promise((resolve) => {
     id: 'git-projects',
     mode: "PERM",
     tables:[
-      ProjectTable
+      ProjectTable,
+      CommandGroup
     ],
   })
     .then(() => resolve())

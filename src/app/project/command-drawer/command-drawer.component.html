@@ -1,0 +1,12 @@
+<div>
+  <nz-form-item>
+    <nz-input-group nzPrefixIcon="edit">
+      <input type="text" nz-input placeholder="Group Name" [(ngModel)]="groupName"/>
+    </nz-input-group>
+  </nz-form-item>
+  <nz-checkbox-group style="display:flex; flex-direction: column"  [(ngModel)]="options"></nz-checkbox-group>
+  <button   nzType="primary" nz-button class="submit-btn"(click)="save()">Save</button>
+
+
+</div>
+

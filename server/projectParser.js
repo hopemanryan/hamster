@@ -44,7 +44,7 @@ var readdir = require('fs').promises.readdir;
 var gitlog_1 = require("gitlog");
 function getProjectInfo(projectPath) {
     return __awaiter(this, void 0, void 0, function () {
-        var fileList, packageJsonFileRaw, packageJsonParsed, resp, response, script, key, key;
+        var fileList, packageJsonFileRaw, packageJsonParsed, commits, response, script, key, key;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, fs.readdir(projectPath)];
@@ -57,10 +57,16 @@ function getProjectInfo(projectPath) {
                 case 2:
                     packageJsonFileRaw = _a.sent();
                     packageJsonParsed = JSON.parse(packageJsonFileRaw);
-                    resp = gitlog_1.default({
-                        repo: projectPath,
-                        fields: ["subject", "authorName", "authorDate"],
-                    });
+                    commits = [];
+                    try {
+                        commits = gitlog_1.default({
+                            repo: projectPath,
+                            fields: ["subject", "authorName", "authorDate"],
+                        });
+                    }
+                    catch (e) {
+                        commits = [];
+                    }
                     response = {
                         id: '' + uuidv4(),
                         projectName: packageJsonParsed.name,
@@ -68,7 +74,7 @@ function getProjectInfo(projectPath) {
                         scripts: [],
                         projectPath: projectPath,
                         appRequirements: [],
-                        gitCommits: resp
+                        gitCommits: commits
                     };
                     if (packageJsonParsed.scripts) {
                         for (script in packageJsonParsed.scripts) {

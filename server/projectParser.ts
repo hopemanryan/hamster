@@ -14,11 +14,16 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
 
     const packageJsonFileRaw = await fs.readFile(projectPath+ '/package.json', 'utf-8');
     const packageJsonParsed: any = JSON.parse(packageJsonFileRaw);
-    // const info = await gitCommitInfo({cwd: projectPath});
-   const resp  =  gitlog({
-    repo: projectPath,
-    fields: ["subject", "authorName", "authorDate"],
-  });
+    let commits = [];
+    try {
+       commits  =  gitlog({
+        repo: projectPath,
+        fields: ["subject", "authorName", "authorDate"],
+      });
+
+    } catch (e) {
+      commits = []
+    }
 
 
   const response: IProject = {
@@ -28,7 +33,7 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
       scripts: [],
       projectPath,
       appRequirements: [],
-      gitCommits: resp
+      gitCommits: commits
     };
 
 
