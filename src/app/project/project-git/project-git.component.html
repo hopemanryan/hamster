@@ -3,12 +3,13 @@
 </div>
 <nz-collapse *ngIf="gitCommits && gitCommits.length">
 
-  <nz-input-group [nzSuffix]="suffixIconSearch">
-    <input type="text" nz-input placeholder="Search for dependencies..." (input)="onInputChange($event.target.value)"/>
+  <nz-input-group [nzSuffix]="suffixIconSearch" >
+    <input type="text" nz-input placeholder="Search for Commits..." (input)="onInputChange($event.target.value)"/>
   </nz-input-group>
   <ng-template #suffixIconSearch>
     <i nz-icon nzType="search"></i>
   </ng-template>
+  <br>
   <nz-collapse-panel *ngFor="let commit of gitCommits | gitSearch: search"
                      [nzHeader]="(commit.authorDate ) + ' - ' +  commit.authorName" [nzActive]="">
 
@@ -17,10 +18,11 @@
     </p>
     <p *ngIf="commit.seeFiles">
       <br>
-
       <nz-list nzBordered nzSize="small">
         <nz-list-item *ngFor="let item of commit.files">{{item}}</nz-list-item>
       </nz-list>
+      Hash: <span class="hash">{{commit.hash || '--'}}</span>
+
     </p>
 
   </nz-collapse-panel>
