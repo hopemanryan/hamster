@@ -13,11 +13,16 @@ import {
 import {LongPress} from "../shared/directives/longpress.directive";
 import { CommandDrawerComponent } from './command-drawer/command-drawer.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { ProjectScriptsComponent } from './project-scripts/project-scripts.component';
+import { ProjectRequirementsComponent } from './project-requirements/project-requirements.component';
+import { ProjectGitComponent } from './project-git/project-git.component';
+import { TagFilterPipe } from './project-requirements/tag-filter.pipe';
+import { GitSearchPipe } from './project-git/git-search.pipe';
 
 
 
 @NgModule({
-  declarations: [ProjectComponent, LongPress, CommandDrawerComponent],
+  declarations: [ProjectComponent, LongPress, CommandDrawerComponent, ProjectScriptsComponent, ProjectRequirementsComponent, ProjectGitComponent, TagFilterPipe, GitSearchPipe],
   imports: [
     CommonModule,
     ProjectRoutingModule,

@@ -1,0 +1,17 @@
+<div *ngIf="!appRequirements || !appRequirements.length"  style="text-align: center; margin-bottom: 1rem">
+  No Dependencies Found
+</div>
+
+<div *ngIf="appRequirements && appRequirements.length">
+  <nz-input-group [nzSuffix]="suffixIconSearch">
+    <input type="text" nz-input placeholder="Search for dependencies..."  (input)="onInputChange($event.target.value)"/>
+  </nz-input-group>
+  <ng-template #suffixIconSearch>
+    <i nz-icon nzType="search"></i>
+  </ng-template>
+
+  <div style="padding-top: 1rem">
+    <nz-tag *ngFor="let appReq of appRequirements | dependFilter: search"> {{appReq.name}} - {{appReq.version}}</nz-tag>
+  </div>
+
+</div>

@@ -1,6 +1,6 @@
 import {Component, NgZone, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {Observable, of} from "rxjs";
+import {EMPTY, Observable, of} from "rxjs";
 import {IProject, IProjectScript} from "../../interfaces/project.interface";
 import {ProjectService} from "../../services/project.service";
 import {switchMap, tap} from "rxjs/operators";
@@ -28,9 +28,8 @@ export class ProjectComponent implements OnInit {
     this.projectService.$projectSelected.pipe(
       tap(project => this.project = project),
       switchMap((project) => !project ? this.router.navigate(['/app']) : of(project)),
-      switchMap(() => this.projectService.getProjectCommandGroups(this.project.id)),
+      switchMap(() =>  this.project  ? this.projectService.getProjectCommandGroups(this.project.id) : EMPTY),
       tap(cmdGroups => this.commandGroups = cmdGroups),
-      tap(console.log)
     ).subscribe()
 
   }
