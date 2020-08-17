@@ -18,7 +18,7 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
     try {
        commits  =  gitlog({
         repo: projectPath,
-        fields: ["subject", "authorName", "authorDate", "hash"],
+        fields: ["subject", "authorName", "authorDate", "hash", "committerDateRel"],
       });
 
     } catch (e) {
