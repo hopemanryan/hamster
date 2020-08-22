@@ -4,5 +4,6 @@
     [nzTooltipTitle]="userInfoService.userName" nzTooltipPlacement="bottom" nz-button nz-tooltip
     [nzSize]="'large'"
     *ngIf="userInfoService.userName"
+    (click)="goToSettings()"
     [nzText]="getFirstLetter()"></nz-avatar>
 </div>

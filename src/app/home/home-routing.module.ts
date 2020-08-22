@@ -14,6 +14,12 @@ const routes: Routes = [
         // @ts-ignore
         loadChildren: () => import('../project/project.module').then(p => p.ProjectModule)
       },
+      {
+        path: 'settings',
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        loadChildren: () => import('../settings/settings.module').then(s => s.SettingsModule)
+      }
     ]
   }
 ];
