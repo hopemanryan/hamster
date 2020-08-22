@@ -61,7 +61,8 @@ function getProjectInfo(projectPath) {
                     try {
                         commits = gitlog_1.default({
                             repo: projectPath,
-                            fields: ["subject", "authorName", "authorDate"],
+                            number: 50,
+                            fields: ["subject", "authorName", "authorDate", "hash", "committerDateRel"],
                         });
                     }
                     catch (e) {

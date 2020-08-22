@@ -1,0 +1,12 @@
+@import "./src/styles";
+.see-more {
+  color: $primaryColor;
+  text-decoration: underline;
+  text-decoration-color: $primaryColor;
+  cursor: pointer;
+}
+
+.hash {
+  color: $primaryColor;
+  font-weight: bold;
+}
