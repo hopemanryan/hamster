@@ -32,7 +32,16 @@ export class CliFinder  {
   }
 
   private findWindowsOptions() {
-
+      return [
+        {
+          name: 'CMD',
+          val: 'cmd.exe'
+        },
+        {
+          name: 'Powershell',
+          val: 'powershell.exe'
+        }
+      ]
   }
 
   private async findMacOptions() {

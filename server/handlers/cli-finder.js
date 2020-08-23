@@ -77,6 +77,16 @@ var CliFinder = /** @class */ (function () {
         });
     };
     CliFinder.prototype.findWindowsOptions = function () {
+        return [
+            {
+                name: 'CMD',
+                val: 'cmd.exe'
+            },
+            {
+                name: 'Powershell',
+                val: 'powershell.exe'
+            }
+        ];
     };
     CliFinder.prototype.findMacOptions = function () {
         return __awaiter(this, void 0, void 0, function () {

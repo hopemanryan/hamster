@@ -4,11 +4,13 @@ import {ICurrentlyRunningProcess, IProjectScript} from "../interfaces/project.in
 import {Observable, ReplaySubject} from "rxjs";
 import IpcRendererEvent = Electron.IpcRendererEvent;
 import {CommunicatorService} from "./communicator.service";
+import {SqlService} from "./sql.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CliService {
+  customCli: string
   currentlyRunning: ICurrentlyRunningProcess[] = [];
   $currentlyRunning: ReplaySubject<Array<ICurrentlyRunningProcess>> = new ReplaySubject<Array<ICurrentlyRunningProcess>>();
   listeners: Array<{eventName: string, callback: any}> = [
@@ -22,8 +24,9 @@ export class CliService {
     }
   ];
 
-  constructor(private projectService: ProjectService, private zone: NgZone, private communicatorService: CommunicatorService) {
+  constructor(private projectService: ProjectService, private zone: NgZone, private communicatorService: CommunicatorService, private sqlService: SqlService) {
     this.communicatorService.addMultipleListeners(this.listeners)
+
   }
 
 
@@ -55,6 +58,7 @@ export class CliService {
 
   runCmdCommand(path: string, projectId: string, script: IProjectScript): void {
     if(!path || !script) return;
-    this.communicatorService.sendEvent('runCmdCommand', {folderPath: path, script: script, id: projectId})
+    this.communicatorService.sendEvent('runCmdCommand', {folderPath: path, script: script, id: projectId, cli: this.customCli})
   }
 }
+

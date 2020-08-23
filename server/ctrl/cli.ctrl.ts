@@ -25,12 +25,10 @@ export class CliCtrl extends BaseCtrl{
 
 
 
-  runCliCmd(data: { folderPath: string, script: IProjectScript, id: string }) {
+  runCliCmd(data: { folderPath: string, script: IProjectScript, id: string, cli?: string }) {
     this.win.webContents.send('processRunning', {id: data.id, key: data.script.keyword});
 
-    const proc = this.buildCmdProcCommand(data.script.cmd, data.folderPath);
-
-
+      const proc = this.buildCmdProcCommand(data.script.cmd, data.folderPath, data.cli);
 
       const  exec = require('child_process').exec;
 
@@ -54,12 +52,12 @@ export class CliCtrl extends BaseCtrl{
   }
 
 
-  buildCmdProcCommand(cmd: string, path: string) {
+  buildCmdProcCommand(cmd: string, path: string , application?: string) {
     switch (this.os) {
       case 'windows':
-        return `start cmd.exe /K ${cmd}`;
+        return `start ${application || 'cmd.exe'} /K ${cmd}`;
       case 'mac':
-        return `osascript -e 'tell application "Terminal"
+        return `osascript -e 'tell application "${application || 'Terminal'}"
     do script "cd ${path} && ${cmd} "
     activate
 end tell'`;

@@ -80,6 +80,7 @@ var PersonalCtrl = /** @class */ (function (_super) {
                         return [4 /*yield*/, cliFinder.findOptions()];
                     case 2:
                         options = _a.sent();
+                        this.win.webContents.send('getCliOptionsResp', options);
                         console.log(options);
                         return [3 /*break*/, 4];
                     case 3:

@@ -7,6 +7,7 @@ import { AppModule } from './app/app.module';
 import { AppConfig } from './environments/environment';
 import {ProjectTable} from "./tables/project.table";
 import {CommandGroup} from "./tables/command-group.table";
+import {Settings} from "./tables/settings.table";
 
 if (AppConfig.production) {
   enableProdMode();
@@ -14,11 +15,12 @@ if (AppConfig.production) {
 
 const resolved = new Promise((resolve) => {
   return nSQL().createDatabase({
-    id: 'git-projects',
+    id: 'hamster',
     mode: "PERM",
     tables:[
       ProjectTable,
-      CommandGroup
+      CommandGroup,
+      Settings
     ],
   })
     .then(() => resolve())

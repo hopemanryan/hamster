@@ -81,7 +81,7 @@ var CliCtrl = /** @class */ (function (_super) {
     CliCtrl.prototype.runCliCmd = function (data) {
         var _this = this;
         this.win.webContents.send('processRunning', { id: data.id, key: data.script.keyword });
-        var proc = this.buildCmdProcCommand(data.script.cmd, data.folderPath);
+        var proc = this.buildCmdProcCommand(data.script.cmd, data.folderPath, data.cli);
         var exec = require('child_process').exec;
         var cmdOpts = {
             cwd: data.folderPath
@@ -94,12 +94,12 @@ var CliCtrl = /** @class */ (function (_super) {
             _this.win.webContents.send('processKilled', { id: data.id });
         });
     };
-    CliCtrl.prototype.buildCmdProcCommand = function (cmd, path) {
+    CliCtrl.prototype.buildCmdProcCommand = function (cmd, path, application) {
         switch (this.os) {
             case 'windows':
-                return "start cmd.exe /K " + cmd;
+                return "start " + (application || 'cmd.exe') + " /K " + cmd;
             case 'mac':
-                return "osascript -e 'tell application \"Terminal\"\n    do script \"cd " + path + " && " + cmd + " \"\n    activate\nend tell'";
+                return "osascript -e 'tell application \"" + (application || 'Terminal') + "\"\n    do script \"cd " + path + " && " + cmd + " \"\n    activate\nend tell'";
             default:
                 break;
         }
