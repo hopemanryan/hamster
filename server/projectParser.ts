@@ -12,20 +12,11 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
       throw Error(ErrorsEnum.NOT_GIT_PATH)
     }
 
-    const packageJsonFileRaw = await fs.readFile(projectPath+ '/package.json', 'utf-8');
-    const packageJsonParsed: any = JSON.parse(packageJsonFileRaw);
-    let commits = [];
-    try {
-       commits  =  gitlog({
-        repo: projectPath,
-         number: 50,
-        fields: ["subject", "authorName", "authorDate", "hash", "committerDateRel"],
-      });
 
-    } catch (e) {
-      commits = []
-    }
 
+
+  const packageJsonFileRaw = await fs.readFile(projectPath+ '/package.json', 'utf-8');
+  const packageJsonParsed: any = JSON.parse(packageJsonFileRaw);
 
   const response: IProject = {
       id: '' + uuidv4(),
@@ -34,8 +25,10 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
       scripts: [],
       projectPath,
       appRequirements: [],
-      gitCommits: commits
+      gitCommits: getCommits(projectPath),
+      readMe: await getReadMe(projectPath)
     };
+
 
 
     if(packageJsonParsed.scripts) {
@@ -55,6 +48,7 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
           })
         }
     }
+
   if(packageJsonParsed.devDependencies) {
     for(const key in packageJsonParsed.devDependencies) {
       response.appRequirements.push({
@@ -69,6 +63,29 @@ export async function getProjectInfo(projectPath: string): Promise<any> {
 
 }
 
+
+function getCommits(projectPath: string): Array<any> {
+  try {
+    return  gitlog({
+      repo: projectPath,
+      number: 50,
+      fields: ["subject", "authorName", "authorDate", "hash", "committerDateRel"],
+    });
+
+  } catch (e) {
+    return []
+  }
+}
+
+
+async function getReadMe(projectPath: string) {
+    const fileExists = await fs.pathExists(projectPath + '/README.md');
+    if(fileExists) {
+      return fs.readFile(projectPath +'/README.md', 'utf-8');
+
+    }
+    return ''
+}
 
 
 function uuidv4() {

@@ -106,6 +106,7 @@
     "gitlog": "4.0.0",
     "jsonpath": "1.0.2",
     "ng-zorro-antd": "9.3.0",
+    "ngx-markdown": "10.1.1",
     "xml2json": "^0.12.0"
   }
 }

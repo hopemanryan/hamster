@@ -18,11 +18,13 @@ import { ProjectRequirementsComponent } from './project-requirements/project-req
 import { ProjectGitComponent } from './project-git/project-git.component';
 import { TagFilterPipe } from './project-requirements/tag-filter.pipe';
 import { GitSearchPipe } from './project-git/git-search.pipe';
+import { ProjectReadmeComponent } from './project-readme/project-readme.component';
+import {MarkdownModule} from "ngx-markdown";
 
 
 
 @NgModule({
-  declarations: [ProjectComponent, LongPress, CommandDrawerComponent, ProjectScriptsComponent, ProjectRequirementsComponent, ProjectGitComponent, TagFilterPipe, GitSearchPipe],
+  declarations: [ProjectComponent, LongPress, CommandDrawerComponent, ProjectScriptsComponent, ProjectRequirementsComponent, ProjectGitComponent, TagFilterPipe, GitSearchPipe, ProjectReadmeComponent],
   imports: [
     CommonModule,
     ProjectRoutingModule,
@@ -41,7 +43,8 @@ import { GitSearchPipe } from './project-git/git-search.pipe';
     NzIconModule,
     ReactiveFormsModule,
     FormsModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    MarkdownModule.forRoot(),
   ],
 
 })

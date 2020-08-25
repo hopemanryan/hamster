@@ -7,7 +7,8 @@ export const ProjectTable = {
     "projectPath:string": {},
     "scripts:obj[]": [],
     "appRequirements:obj[]" : [],
-    "gitCommits:obj[]": []
+    "gitCommits:obj[]": [],
+    "readMe:string": {},
   },
 
 };

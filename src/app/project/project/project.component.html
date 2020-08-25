@@ -12,6 +12,9 @@
     <nz-tab [nzTitle]="'Commands'">
      <app-project-scripts [scripts]="project.scripts" (run)="this.runScript($event)"></app-project-scripts>
     </nz-tab>
+    <nz-tab [nzTitle]="'README'">
+      <app-project-readme [readMe]="project.readMe"></app-project-readme>
+    </nz-tab>
     <nz-tab [nzTitle]="'Dependencies'">
       <app-project-requirements  [appRequirements]="project.appRequirements"></app-project-requirements>
     </nz-tab>
@@ -31,6 +34,7 @@
         </nz-tag>
 
       </div>
+
 
 
     </nz-tab>

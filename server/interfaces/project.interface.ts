@@ -6,6 +6,7 @@ export interface IProject {
   projectPath: string
   appRequirements? : IAppReq[],
   gitCommits: any[]
+  readMe?: string
 }
 
 export interface IProjectScript {

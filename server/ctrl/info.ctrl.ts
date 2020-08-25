@@ -21,7 +21,6 @@ export class PersonalCtrl extends BaseCtrl{
       try {
         const options = await cliFinder.findOptions();
         this.win.webContents.send('getCliOptionsResp', options);
-        console.log(options)
       } catch (e) {
         console.log(e)
       }

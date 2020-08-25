@@ -44,39 +44,32 @@ var readdir = require('fs').promises.readdir;
 var gitlog_1 = require("gitlog");
 function getProjectInfo(projectPath) {
     return __awaiter(this, void 0, void 0, function () {
-        var fileList, packageJsonFileRaw, packageJsonParsed, commits, response, script, key, key;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var fileList, packageJsonFileRaw, packageJsonParsed, response, _a, script, key, key;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0: return [4 /*yield*/, fs.readdir(projectPath)];
                 case 1:
-                    fileList = _a.sent();
+                    fileList = _b.sent();
                     if (!fileList.includes('.git')) {
                         throw Error(errors_enum_1.ErrorsEnum.NOT_GIT_PATH);
                     }
                     return [4 /*yield*/, fs.readFile(projectPath + '/package.json', 'utf-8')];
                 case 2:
-                    packageJsonFileRaw = _a.sent();
+                    packageJsonFileRaw = _b.sent();
                     packageJsonParsed = JSON.parse(packageJsonFileRaw);
-                    commits = [];
-                    try {
-                        commits = gitlog_1.default({
-                            repo: projectPath,
-                            number: 50,
-                            fields: ["subject", "authorName", "authorDate", "hash", "committerDateRel"],
-                        });
-                    }
-                    catch (e) {
-                        commits = [];
-                    }
-                    response = {
+                    _a = {
                         id: '' + uuidv4(),
                         projectName: packageJsonParsed.name,
                         version: packageJsonParsed.version,
                         scripts: [],
                         projectPath: projectPath,
                         appRequirements: [],
-                        gitCommits: commits
+                        gitCommits: getCommits(projectPath)
                     };
+                    return [4 /*yield*/, getReadMe(projectPath)];
+                case 3:
+                    response = (_a.readMe = _b.sent(),
+                        _a);
                     if (packageJsonParsed.scripts) {
                         for (script in packageJsonParsed.scripts) {
                             response.scripts.push({
@@ -107,6 +100,34 @@ function getProjectInfo(projectPath) {
     });
 }
 exports.getProjectInfo = getProjectInfo;
+function getCommits(projectPath) {
+    try {
+        return gitlog_1.default({
+            repo: projectPath,
+            number: 50,
+            fields: ["subject", "authorName", "authorDate", "hash", "committerDateRel"],
+        });
+    }
+    catch (e) {
+        return [];
+    }
+}
+function getReadMe(projectPath) {
+    return __awaiter(this, void 0, void 0, function () {
+        var fileExists;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fs.pathExists(projectPath + '/README.md')];
+                case 1:
+                    fileExists = _a.sent();
+                    if (fileExists) {
+                        return [2 /*return*/, fs.readFile(projectPath + '/README.md', 'utf-8')];
+                    }
+                    return [2 /*return*/, ''];
+            }
+        });
+    });
+}
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);

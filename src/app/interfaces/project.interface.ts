@@ -5,7 +5,8 @@ export interface IProject {
   scripts: Array<IProjectScript>,
   projectPath: string,
   appRequirements? : IAppReq[],
-  gitCommits: any[]
+  gitCommits: any[],
+  readMe?: string
 
 
 }
