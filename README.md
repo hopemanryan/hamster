@@ -23,3 +23,10 @@ Benefits:
 - [ ] Cli select
 - [ ] Toastr messages 
 ```
+
+
+
+#### download app 
+
+MacOs: https://drive.google.com/file/d/1VNcowxkOXwxINKPit5jcTOjbg0XPDkV0/view
+Windows: https://drive.google.com/file/d/1tRv07uq0pLL8Seu1lO4ELpjbctcICAtc/view?usp=sharing
