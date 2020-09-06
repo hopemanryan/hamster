@@ -13,15 +13,15 @@ Benefits:
 ### tasks 
 
 ```
-- [ ] Refresh All Projects on initiation 
+- [x] Refresh All Projects on initiation 
 - [x] Live view of which projects have running process
 - [X] Manual Sync 
 - [X] Add single project
 - [X] Add folder scan 
 - [X] Remove Project
 - [x] Run Multiple commands
-- [ ] Cli select
-- [ ] Toastr messages 
+- [x] Cli select
+- [x] Toastr messages 
 ```
 
 
